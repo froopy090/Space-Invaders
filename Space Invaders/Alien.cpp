@@ -1,7 +1,7 @@
 #include "Alien.h"
 
 Alien::Alien(Texture2D texture, Rectangle source, Rectangle destination, Vector2 position, float rotation, float speed, Bullet alienBullet, bool switchedDirection) 
-	: Entity(texture, source, destination, position, rotation), speed(speed), alienBullet(alienBullet), moveX(10.0), moveY(10.0), isDead(false)
+	: Entity(texture, source, destination, position, rotation), speed(speed), alienBullet(alienBullet), moveX(15.0), moveY(20.0), isDead(false)
 {
 	
 }
@@ -23,11 +23,14 @@ int Alien::getRectDestY() {
 
 
 void Alien::Event() {
-	//bullet event
-	if (GetRandomValue(0, 5000) > 4999) {
-		alienBullet.isShot = true;
-		positionXBullet = this->destination.x + 14;
-		positionYBullet = this->destination.y + 14;
+	if (!isDead) {
+		//bullet event
+		if (GetRandomValue(0, 5000) > 4998 && alienBullet.isShot == false) {
+			alienBullet.isShot = true;
+			positionXBullet = this->destination.x + 14;
+			positionYBullet = this->destination.y + 14;
+			alienBullet.setDestRecY(positionYBullet);
+		}
 	}
 }
 
@@ -53,16 +56,16 @@ void Alien::Update(bool* switchedFlag, bool* isHit) {
 			alienBullet.AlienUpdate(positionXBullet, positionYBullet);
 		}
 	}
-	
 }
 
 void Alien::Draw() {
 	if (!isDead) {
 		DrawTexturePro(texture, source, destination, position, rotation, WHITE);
-	}
-	//bullet draw
-	if (alienBullet.isShot) {
-		alienBullet.Draw();
+
+		//bullet draw
+		if (alienBullet.isShot) {
+			alienBullet.Draw();
+		}
 	}
 }
 

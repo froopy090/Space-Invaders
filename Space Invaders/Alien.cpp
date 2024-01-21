@@ -24,7 +24,7 @@ int Alien::getRectDestY() {
 
 void Alien::Event() {
 	//bullet event
-	if (GetRandomValue(0, 10000) > 9999) {
+	if (GetRandomValue(0, 5000) > 4999) {
 		alienBullet.isShot = true;
 		positionXBullet = this->destination.x + 14;
 		positionYBullet = this->destination.y + 14;

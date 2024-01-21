@@ -21,6 +21,13 @@ int Alien::getRectDestY() {
 	return destination.y;
 }
 
+int Alien::getBulletX() {
+	return alienBullet.getRectDestX();
+}
+
+int Alien::getBulletY() {
+	return alienBullet.getRectDestY();
+}
 
 void Alien::Event() {
 	if (!isDead) {

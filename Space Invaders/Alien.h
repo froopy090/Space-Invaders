@@ -23,6 +23,8 @@ public:
     //getters
     int getRectDestX();
     int getRectDestY();
+    int getBulletY();
+    int getBulletX();
 
     //game functions
     void Event();

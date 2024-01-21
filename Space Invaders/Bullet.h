@@ -16,6 +16,8 @@ public:
     int getRectDestX();
     int getRectDestY();
 
+    void setDestRecY(int posY);
+
     void setShotBool(bool isShot);
 
     Bullet();

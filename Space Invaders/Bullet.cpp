@@ -28,6 +28,10 @@ void Bullet::setShotBool(bool isShot) {
 	this->isShot = isShot;
 }
 
+void Bullet::setDestRecY(int posY) {
+	this->destination.y = posY;
+}
+
 void Bullet::Update(int destRecX) {
 	this->destination.y -= GetFrameTime() * speed;
 	this->destination.x = destRecX;

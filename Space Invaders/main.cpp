@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Alien.h"
+#include <iostream>
 
 //constants
 #define WINDOW_WIDTH 800
@@ -112,6 +113,14 @@ void main() {
 						playerBullet->reset(); //removing the bullet after it hits the alien
 					}
 					alienMatrix[r][c].Update(&switched, &isHit);
+
+					//checking if alien has hit player with bullet -- IHAVE AN ISSUE HGERE WTFFF
+					if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
+						if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
+							player.kill();
+						}
+
+					}
 				}
 			}
 			if (switched) {
@@ -126,6 +135,13 @@ void main() {
 						playerBullet->reset(); //removing the bullet after it hits the alien
 					}
 					alienMatrix[r][c].Update(&switched, &isHit);
+
+					//checking if alien has hit player with bullet -- IHAVE AN ISSUE HGERE WTFFF
+					if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
+						if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
+							player.kill();
+						}
+					}
 				}
 			}
 			if (switched) {
@@ -133,7 +149,7 @@ void main() {
 			}
 		}
 		switched = false; //resetting switched flag for next iteration
-		
+		player.Update();
 			
 		
 		

@@ -33,7 +33,7 @@ void main() {
 	//player bullet variables
 	Rectangle playerBulletSource = { 19,3,1,3 };
 	Rectangle playerBulletDest = { playerDest.x + 14, playerDest.y - 12, 4,12 };
-	float bulletSpeed = 700.0; 
+	float bulletSpeed = 400.0; 
 
 	//alien variables
 	const int row = 5;

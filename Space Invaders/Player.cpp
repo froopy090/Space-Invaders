@@ -30,11 +30,11 @@ Bullet Player::getPlayerBullet() {
 }
 
 int Player::getRecDestX() {
-	return playerBullet->getRectDestX();
+	return this->destination.x; //this was incorrect, thanks to thenewchicken for helping me debug this
 }
 
 int Player::getRecDestY() {
-	return playerBullet->getRectDestY();
+	return this->destination.y;
 }
 
 

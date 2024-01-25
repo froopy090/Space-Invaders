@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Alien.h"
+#include "Shield.h"
 #include <iostream>
 
 //constants
@@ -61,6 +62,7 @@ void main() {
 	Player player(shipTexture, playerSource, playerDest, position, rotation, speed, playerBullet);
 	//Alien alien(shipTexture, alienSource, alienDest, position, rotation, alienSpeed, alienBullet);
 	Alien alienMatrix[row][column];
+	Shield shield = Shield();
 
 
 	Alien* alien;
@@ -161,6 +163,7 @@ void main() {
 			background.Draw();
 			DrawFPS(0, 0);
 			player.Draw();
+			shield.Draw();
 			//drawing all aliens
 			for (int r = 0; r < row; r++) {
 				for (int c = 0; c < column; c++) {

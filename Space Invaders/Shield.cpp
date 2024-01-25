@@ -33,7 +33,7 @@ Shield::Shield() {
 
 	//semi-circle
 	center = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f + recHeight/2 + offsetY };
-	radius = 30.0f;
+	radius = 25.0f;
 	startAngle = 90.0f;
 	endAngle = 270.0f;
 	segments = 1;

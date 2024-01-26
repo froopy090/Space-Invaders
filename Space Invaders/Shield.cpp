@@ -1,6 +1,8 @@
 #include "Shield.h"
 
-Shield::Shield(float offsetX) {
+Shield::Shield(float offsetX, Bullet *playerBullet, Bullet *alienBullet)
+	: playerBullet(playerBullet), alienBullet(alienBullet)
+{
 	//global offset
 	offsetX = offsetX;
 	offsetY = 200.0f;
@@ -46,4 +48,20 @@ void Shield::Draw() {
 	DrawRectanglePro(cornerRight, cornerOrigin, cornerRightRotation, cornerColor);
 	DrawRectanglePro(cornerLeft, cornerOrigin, cornerLeftRotation, cornerColor);
 	DrawCircleSector(center, radius, startAngle, endAngle, segments, circleColor);
+}
+
+void Shield::Update() {
+	//player bullet collision
+	if (playerBullet->getRectDestX() >= recX - recOrigin.x && playerBullet->getRectDestX() <= recX + recOrigin.x) {
+		if (playerBullet->getRectDestY() >= recY - recOrigin.y && playerBullet->getRectDestY() <= recY + recOrigin.y) {
+			playerBullet->reset();
+		}
+	}
+
+	//alien bullet collision
+	/*if (alienBullet->getRectDestX() >= recX - recOrigin.x && alienBullet->getRectDestX() <= recX + recOrigin.x) {
+		if (alienBullet->getRectDestY() >= recY - recOrigin.y && alienBullet->getRectDestY() <= recY + recOrigin.y) {
+			alienBullet->reset();
+		}
+	}*/
 }

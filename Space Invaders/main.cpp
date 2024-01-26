@@ -65,10 +65,10 @@ void main() {
 
 	Alien alienMatrix[row][column];
 
-	Shield shield1 = Shield(offsetX);
-	Shield shield2 = Shield(offsetX + 170);
-	Shield shield3 = Shield(offsetX + 340);
-	Shield shield4 = Shield(offsetX + 510);
+	Shield shield1 = Shield(offsetX, playerBullet, &alienBullet);
+	Shield shield2 = Shield(offsetX + 170, playerBullet, &alienBullet);
+	Shield shield3 = Shield(offsetX + 340, playerBullet, &alienBullet);
+	Shield shield4 = Shield(offsetX + 510, playerBullet, &alienBullet);
 
 
 	Alien* alien;
@@ -100,16 +100,17 @@ void main() {
 
 
 	while (!WindowShouldClose()) {
-		//events
+		//----events-------------------------------------
 		player.Event();
 		for (int r = 0; r < row; r++) { //alien events
 			for (int c = 0; c < column; c++) {
 				alienMatrix[r][c].Event();
 			}
 		}
+		//-------------------------------------------------
 		
 
-		//update
+		//----update----------------------------------------
 		background.Update();
 		player.Update();
 		//updating all alien positions
@@ -157,13 +158,19 @@ void main() {
 			}
 		}
 		switched = false; //resetting switched flag for next iteration
+
 		player.Update();
-			
+
+		shield1.Update();
+		shield2.Update();
+		shield3.Update();
+		shield4.Update();
+		//--------------------------------------------------	
 		
 		
 		
 
-		//draw
+		//----draw------------------------------------------
 		BeginDrawing();
 			ClearBackground(BLACK);
 			DrawFPS(0, 0);
@@ -185,6 +192,7 @@ void main() {
 			}
 			
 		EndDrawing();
+		//--------------------------------------------------
 	}
 
 	//deleting stuff to deallocate mem

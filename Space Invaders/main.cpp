@@ -3,7 +3,6 @@
 #include "Bullet.h"
 #include "Alien.h"
 #include "Shield.h"
-#include <iostream>
 
 //constants
 #define WINDOW_WIDTH 800

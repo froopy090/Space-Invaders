@@ -57,22 +57,21 @@ void Alien::Update(bool* switchedFlag, bool* isHit) {
 			isDead = true;
 			*isHit = false;
 		}
+	}
 
-		//bullet update
-		if (alienBullet.isShot) {
-			alienBullet.AlienUpdate(positionXBullet, positionYBullet);
-		}
+	//bullet update even if alien is dead
+	if (alienBullet.isShot) {
+		alienBullet.AlienUpdate(positionXBullet, positionYBullet);
 	}
 }
 
 void Alien::Draw() {
 	if (!isDead) {
 		DrawTexturePro(texture, source, destination, position, rotation, WHITE);
-
-		//bullet draw
-		if (alienBullet.isShot) {
-			alienBullet.Draw();
-		}
+	}
+	//bullet draw, even if alien is dead
+	if (alienBullet.isShot) {
+		alienBullet.Draw();
 	}
 }
 

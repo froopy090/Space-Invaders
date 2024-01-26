@@ -1,11 +1,12 @@
 #include "Shield.h"
 
-Shield::Shield() {
+Shield::Shield(float offsetX) {
 	//global offset
-	offsetY = 200;
+	offsetX = offsetX;
+	offsetY = 200.0f;
 
 	//main rectangle
-	recX = GetScreenWidth() / 2;
+	recX = GetScreenWidth() / 2 + offsetX;
 	recY = GetScreenHeight() / 2 + offsetY;
 	recWidth = 100;
 	recHeight = 70;
@@ -22,17 +23,17 @@ Shield::Shield() {
 	cornerColor = BLACK;
 
 	//right corner
-	cornerRightX = GetScreenWidth() / 2 + recWidth / 2;
+	cornerRightX = GetScreenWidth() / 2 + recWidth / 2 + offsetX;
 	cornerRight = { cornerRightX, cornerY, cornerWidth, cornerHeight };
 	cornerRightRotation = 45.0f;
 
 	//left corner
-	cornerLeftX = GetScreenWidth() / 2 - recWidth / 2;
+	cornerLeftX = GetScreenWidth() / 2 - recWidth / 2 + offsetX;
 	cornerLeft = { cornerLeftX, cornerY, cornerWidth, cornerHeight };
 	cornerLeftRotation = -cornerRightRotation;
 
 	//semi-circle
-	center = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f + recHeight/2 + offsetY };
+	center = { GetScreenWidth() / 2.0f + offsetX, GetScreenHeight() / 2.0f + recHeight/2 + offsetY };
 	radius = 25.0f;
 	startAngle = 90.0f;
 	endAngle = 270.0f;

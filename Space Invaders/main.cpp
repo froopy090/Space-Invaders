@@ -48,6 +48,9 @@ void main() {
 	Rectangle alienDest = { 100, 100, 35,35 };
 	float alienSpeed = 200;
 
+	//shield variables
+	float offsetX = -250.0f;
+
 	//alien bullet variables
 	Rectangle alienBulletSource = { 11,4, 1, 2 };
 	Rectangle alienBulletDest = { alienDest.x + 4, alienDest.y + 2, 4,12 };
@@ -59,9 +62,13 @@ void main() {
 	Bullet alienBullet(bulletTexture, alienBulletSource, alienBulletDest, position, rotation, alienBulletSpeed);
 
 	Player player(shipTexture, playerSource, playerDest, position, rotation, speed, playerBullet);
-	//Alien alien(shipTexture, alienSource, alienDest, position, rotation, alienSpeed, alienBullet);
+
 	Alien alienMatrix[row][column];
-	Shield shield = Shield();
+
+	Shield shield1 = Shield(offsetX);
+	Shield shield2 = Shield(offsetX + 170);
+	Shield shield3 = Shield(offsetX + 340);
+	Shield shield4 = Shield(offsetX + 510);
 
 
 	Alien* alien;
@@ -159,10 +166,17 @@ void main() {
 		//draw
 		BeginDrawing();
 			ClearBackground(BLACK);
-			background.Draw();
 			DrawFPS(0, 0);
+
+			background.Draw();
+			
 			player.Draw();
-			shield.Draw();
+
+			shield1.Draw();
+			shield2.Draw();
+			shield3.Draw();
+			shield4.Draw();
+
 			//drawing all aliens
 			for (int r = 0; r < row; r++) {
 				for (int c = 0; c < column; c++) {

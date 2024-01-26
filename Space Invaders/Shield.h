@@ -5,12 +5,12 @@ class Shield :
     public Entity
 {
 public:
-    Shield();
-
+    Shield(float offsetX);
     void Draw();
 
 private:
-    //global y offset - this variables moves the entire shield up or down
+    //position offsets, moves the entire shield along x and y axis
+    float offsetX;
     float offsetY;
 
     //main rectangle

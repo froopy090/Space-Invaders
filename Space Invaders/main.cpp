@@ -65,10 +65,10 @@ void main() {
 
 	Alien alienMatrix[row][column];
 
-	Shield shield1 = Shield(offsetX, playerBullet, &alienBullet);
-	Shield shield2 = Shield(offsetX + 170, playerBullet, &alienBullet);
-	Shield shield3 = Shield(offsetX + 340, playerBullet, &alienBullet);
-	Shield shield4 = Shield(offsetX + 510, playerBullet, &alienBullet);
+	Shield shield1 = Shield(offsetX, playerBullet);
+	Shield shield2 = Shield(offsetX + 170, playerBullet);
+	Shield shield3 = Shield(offsetX + 340, playerBullet);
+	Shield shield4 = Shield(offsetX + 510, playerBullet);
 
 
 	Alien* alien;
@@ -123,7 +123,7 @@ void main() {
 					}
 					alienMatrix[r][c].Update(&switched, &isHit);
 
-					//checking if alien has hit player with bullet -- IHAVE AN ISSUE HGERE WTFFF
+					//checking if alien has hit player with bullet
 					if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
 						if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
 							player.kill();
@@ -145,7 +145,7 @@ void main() {
 					}
 					alienMatrix[r][c].Update(&switched, &isHit);
 
-					//checking if alien has hit player with bullet -- IHAVE AN ISSUE HGERE WTFFF
+					//checking if alien has hit player with bullet
 					if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
 						if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
 							player.kill();
@@ -161,10 +161,19 @@ void main() {
 
 		player.Update();
 
-		shield1.Update();
-		shield2.Update();
-		shield3.Update();
-		shield4.Update();
+		shield1.PlayerUpdate(); //player to shield collision update
+		shield2.PlayerUpdate();
+		shield3.PlayerUpdate();
+		shield4.PlayerUpdate();
+
+		for (int r = 0; r < row; r++) { //alien to shield collision update
+			for (int c = 0; c < column; c++) {
+				shield1.AlienUpdate(&alienMatrix[r][c]);
+				shield2.AlienUpdate(&alienMatrix[r][c]);
+				shield3.AlienUpdate(&alienMatrix[r][c]);
+				shield4.AlienUpdate(&alienMatrix[r][c]);
+			}
+		}
 		//--------------------------------------------------	
 		
 		

@@ -1,7 +1,7 @@
 #include "Shield.h"
 
-Shield::Shield(float offsetX, Bullet *playerBullet, Bullet *alienBullet)
-	: playerBullet(playerBullet), alienBullet(alienBullet)
+Shield::Shield(float offsetX, Bullet *playerBullet)
+	: playerBullet(playerBullet)
 {
 	//global offset
 	offsetX = offsetX;
@@ -50,18 +50,22 @@ void Shield::Draw() {
 	DrawCircleSector(center, radius, startAngle, endAngle, segments, circleColor);
 }
 
-void Shield::Update() {
+void Shield::PlayerUpdate() {
 	//player bullet collision
 	if (playerBullet->getRectDestX() >= recX - recOrigin.x && playerBullet->getRectDestX() <= recX + recOrigin.x) {
-		if (playerBullet->getRectDestY() >= recY - recOrigin.y && playerBullet->getRectDestY() <= recY + recOrigin.y) {
+		if (playerBullet->getRectDestY() >= recY - recOrigin.y && playerBullet->getRectDestY() <= recY + recOrigin.y - 1.25) { //idk why but i needed that -1.25 otherwise the bullet would disappear a bit below the shield
 			playerBullet->reset();
 		}
 	}
 
+	
+}
+
+void Shield::AlienUpdate(Alien *alien) {
 	//alien bullet collision
-	/*if (alienBullet->getRectDestX() >= recX - recOrigin.x && alienBullet->getRectDestX() <= recX + recOrigin.x) {
-		if (alienBullet->getRectDestY() >= recY - recOrigin.y && alienBullet->getRectDestY() <= recY + recOrigin.y) {
-			alienBullet->reset();
+	if (alien->getBulletX() >= recX - recOrigin.x && alien->getBulletX() <= recX + recOrigin.x) {
+		if (alien->getBulletY() >= recY - recOrigin.y - 10 && alien->getBulletY() <= recY + recOrigin.y) {
+			alien->setBulletStatus(false);
 		}
-	}*/
+	}
 }

@@ -1,19 +1,20 @@
 #pragma once
 #include "Entity.h"
+#include "Alien.h"
 #include "Bullet.h"
 
 class Shield :
     public Entity
 {
 public:
-    Shield(float offsetX, Bullet *playerBullet, Bullet *alienBullet);
+    Shield(float offsetX, Bullet *playerBullet);
     void Draw();
-    void Update();
+    void AlienUpdate(Alien *alien);
+    void PlayerUpdate();
 
 private:
-    //player and alien bullets - used to detect collision
+    //player bullet for collision
     Bullet *playerBullet;
-    Bullet *alienBullet;
 
     //position offsets, moves the entire shield along x and y axis
     float offsetX;

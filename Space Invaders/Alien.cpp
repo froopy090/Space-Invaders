@@ -22,13 +22,24 @@ int Alien::getRectDestY() {
 }
 
 int Alien::getBulletX() {
-	return alienBullet.getRectDestX();
+	return this->alienBullet.getRectDestX();
 }
 
 int Alien::getBulletY() {
-	return alienBullet.getRectDestY();
+	return this->alienBullet.getRectDestY();
 }
 
+Bullet Alien::getAlienBullet() {
+	return this->alienBullet;
+}
+
+
+//setters
+void Alien::setBulletStatus(bool isShot) {
+	this->alienBullet.isShot = isShot;
+}
+
+//game functions
 void Alien::Event() {
 	if (!isDead) {
 		//bullet event

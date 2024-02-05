@@ -1,57 +1,28 @@
 #pragma once
-#include "Entity.h"
-#include "Alien.h"
+#include "raylib.h"
 #include "Bullet.h"
+#include "Alien.h"
 
-class Shield :
-    public Entity
+#define MAX_WIDTH 100
+#define MAX_HEIGHT 70
+#define PIXEL_SIZE 2 //the shield is being drawn by 2x2 rectangle or "pixels"
+#define X_POS 50
+#define Y_POS 600
+
+class Shield
 {
 public:
-    Shield(float offsetX, Bullet *playerBullet);
-    void Draw();
-    void AlienUpdate(Alien *alien);
-    void PlayerUpdate();
+	Shield(float offsetX);
+	void Draw();
+	void playerUpdate(Bullet *playerBullet);
+	void alienUpdate(Alien *alien);
 
 private:
-    //player bullet for collision
-    Bullet *playerBullet;
+	float offsetX; //decides where the entire shield will be drawn
 
-    //position offsets, moves the entire shield along x and y axis
-    float offsetX;
-    float offsetY;
-
-    //main rectangle
-    float recX;
-    float recY;
-    float recWidth;
-    float recHeight;
-    Rectangle rec;
-    Vector2 recOrigin;
-    float rotation;
-    Color recColor;
-
-    //shared corner rectangle variables
-    float cornerY;
-    float cornerWidth;
-    float cornerHeight;
-    Vector2 cornerOrigin;
-    Color cornerColor;
-
-    //right corner
-    float cornerRightX;
-    Rectangle cornerRight;
-    float cornerRightRotation;
-
-    //left corner
-    float cornerLeftX;
-    Rectangle cornerLeft;
-    float cornerLeftRotation;
-
-    //semi-circle
-    Vector2 center;
-    float radius;
-    float startAngle;
-    float endAngle;
-    int segments;
-    Color circleColor;
+	Rectangle pixelRec[MAX_HEIGHT / PIXEL_SIZE][MAX_WIDTH / PIXEL_SIZE];
+	float xPos;
+	float yPos;
+	Color pixelColor[MAX_HEIGHT / PIXEL_SIZE][MAX_WIDTH / PIXEL_SIZE];
 };
+

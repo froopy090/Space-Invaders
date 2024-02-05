@@ -49,7 +49,7 @@ void main() {
 	float alienSpeed = 200;
 
 	//shield variables
-	float offsetX = -250.0f;
+	float offsetX = 0.0f;
 
 	//alien bullet variables
 	Rectangle alienBulletSource = { 11,4, 1, 2 };
@@ -65,10 +65,10 @@ void main() {
 
 	Alien alienMatrix[row][column];
 
-	Shield shield1 = Shield(offsetX, playerBullet);
-	Shield shield2 = Shield(offsetX + 170, playerBullet);
-	Shield shield3 = Shield(offsetX + 340, playerBullet);
-	Shield shield4 = Shield(offsetX + 510, playerBullet);
+	Shield shield1 = Shield(offsetX);
+	Shield shield2 = Shield(offsetX + 200);
+	Shield shield3 = Shield(offsetX + 400);
+	Shield shield4 = Shield(offsetX + 600);
 
 
 	Alien* alien;
@@ -161,17 +161,17 @@ void main() {
 
 		player.Update();
 
-		shield1.PlayerUpdate(); //player to shield collision update
-		shield2.PlayerUpdate();
-		shield3.PlayerUpdate();
-		shield4.PlayerUpdate();
+		shield1.playerUpdate(playerBullet); //player to shield collision update
+		shield2.playerUpdate(playerBullet);
+		shield3.playerUpdate(playerBullet);
+		shield4.playerUpdate(playerBullet);
 
 		for (int r = 0; r < row; r++) { //alien to shield collision update
 			for (int c = 0; c < column; c++) {
-				shield1.AlienUpdate(&alienMatrix[r][c]);
-				shield2.AlienUpdate(&alienMatrix[r][c]);
-				shield3.AlienUpdate(&alienMatrix[r][c]);
-				shield4.AlienUpdate(&alienMatrix[r][c]);
+				shield1.alienUpdate(&alienMatrix[r][c]);
+				shield2.alienUpdate(&alienMatrix[r][c]);
+				shield3.alienUpdate(&alienMatrix[r][c]);
+				shield4.alienUpdate(&alienMatrix[r][c]);
 			}
 		}
 		//--------------------------------------------------	

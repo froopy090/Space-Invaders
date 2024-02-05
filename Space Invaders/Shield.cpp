@@ -1,71 +1,101 @@
 #include "Shield.h"
 
-Shield::Shield(float offsetX, Bullet *playerBullet)
-	: playerBullet(playerBullet)
+
+
+
+Shield::Shield(float offsetX)
+	: offsetX(offsetX), xPos(X_POS + offsetX), yPos(Y_POS)
 {
-	//global offset
-	offsetX = offsetX;
-	offsetY = 200.0f;
-
-	//main rectangle
-	recX = GetScreenWidth() / 2 + offsetX;
-	recY = GetScreenHeight() / 2 + offsetY;
-	recWidth = 100;
-	recHeight = 70;
-	rec = { recX, recY, recWidth, recHeight };
-	recOrigin = { recWidth / 2, recHeight / 2 };
-	rotation = 0.0f;
-	recColor = WHITE;
-
-	//shared corner variables
-	cornerY = GetScreenHeight() / 2 - recHeight/2 + offsetY;
-	cornerWidth = 20;
-	cornerHeight = 20;
-	cornerOrigin = { cornerWidth / 2, cornerHeight / 2 };
-	cornerColor = BLACK;
-
-	//right corner
-	cornerRightX = GetScreenWidth() / 2 + recWidth / 2 + offsetX;
-	cornerRight = { cornerRightX, cornerY, cornerWidth, cornerHeight };
-	cornerRightRotation = 45.0f;
-
-	//left corner
-	cornerLeftX = GetScreenWidth() / 2 - recWidth / 2 + offsetX;
-	cornerLeft = { cornerLeftX, cornerY, cornerWidth, cornerHeight };
-	cornerLeftRotation = -cornerRightRotation;
-
-	//semi-circle
-	center = { GetScreenWidth() / 2.0f + offsetX, GetScreenHeight() / 2.0f + recHeight/2 + offsetY };
-	radius = 25.0f;
-	startAngle = 90.0f;
-	endAngle = 270.0f;
-	segments = 1;
-	circleColor = BLACK;
+	for (int row = 0; row < MAX_HEIGHT / PIXEL_SIZE; row++) {
+		for (int column = 0; column < MAX_WIDTH / PIXEL_SIZE; column++) {
+			pixelRec[row][column] = { xPos, yPos, PIXEL_SIZE, PIXEL_SIZE, };
+			xPos += PIXEL_SIZE;
+			pixelColor[row][column] = WHITE;
+		}
+		xPos = X_POS + offsetX;
+		yPos += PIXEL_SIZE;
+	}
+	yPos = Y_POS;
 }
 
 void Shield::Draw() {
-	DrawRectanglePro(rec, recOrigin, rotation, recColor);
-	DrawRectanglePro(cornerRight, cornerOrigin, cornerRightRotation, cornerColor);
-	DrawRectanglePro(cornerLeft, cornerOrigin, cornerLeftRotation, cornerColor);
-	DrawCircleSector(center, radius, startAngle, endAngle, segments, circleColor);
-}
-
-void Shield::PlayerUpdate() {
-	//player bullet collision
-	if (playerBullet->getRectDestX() >= recX - recOrigin.x && playerBullet->getRectDestX() <= recX + recOrigin.x) {
-		if (playerBullet->getRectDestY() >= recY - recOrigin.y && playerBullet->getRectDestY() <= recY + recOrigin.y - 1.25) { //idk why but i needed that -1.25 otherwise the bullet would disappear a bit below the shield
-			playerBullet->reset();
+	for (int row = 0; row < MAX_HEIGHT / PIXEL_SIZE; row++) {
+		for (int column = 0; column < MAX_WIDTH / PIXEL_SIZE; column++) {
+			//first row 'deleted' pixels
+			if (row == 0 && (column == 0 || column == 1 || column == 2 || column == 3 
+				|| column == MAX_WIDTH / PIXEL_SIZE - 4 || column == MAX_WIDTH / PIXEL_SIZE - 3
+				|| column == MAX_WIDTH / PIXEL_SIZE - 2 || column == MAX_WIDTH / PIXEL_SIZE - 1)) {
+				DrawRectangleRec(pixelRec[row][column], BLANK);
+			}
+			//second row 'deleted' pixels
+			else if (row == 1 && (column == 0 || column == 1 || column == 2
+				|| column == MAX_WIDTH / PIXEL_SIZE - 3
+				|| column == MAX_WIDTH / PIXEL_SIZE - 2 || column == MAX_WIDTH / PIXEL_SIZE - 1)) {
+				DrawRectangleRec(pixelRec[row][column], BLANK);
+			}
+			//third row 'deleted' pixels
+			else if (row == 2 && (column == 0 || column == 1
+				|| column == MAX_WIDTH / PIXEL_SIZE - 2 || column == MAX_WIDTH / PIXEL_SIZE - 1)) {
+				DrawRectangleRec(pixelRec[row][column], BLANK);
+			}
+			//fourth row 'deleted' pixels
+			else if (row == 3 && (column == 0
+				|| column == MAX_WIDTH / PIXEL_SIZE - 1)) {
+				DrawRectangleRec(pixelRec[row][column], BLANK);
+			}
+			//last row and 2nd to last row 'deleted' pixels
+			else if ((row == MAX_HEIGHT / PIXEL_SIZE - 1 || row == MAX_HEIGHT / PIXEL_SIZE - 2) 
+				&& (column >= 4 && column <= MAX_WIDTH / PIXEL_SIZE - 5)) {
+				DrawRectangleRec(pixelRec[row][column], BLANK);
+			}
+			//3rd to last row 'deleted' pixels
+			else if ((row == MAX_HEIGHT / PIXEL_SIZE - 3 || row == MAX_HEIGHT / PIXEL_SIZE - 4)
+				&& (column >= 5 && column <= MAX_WIDTH / PIXEL_SIZE - 6)) {
+				DrawRectangleRec(pixelRec[row][column], BLANK);
+			}
+			//next 2 rows
+			else if ((row == MAX_HEIGHT / PIXEL_SIZE - 5 || row == MAX_HEIGHT / PIXEL_SIZE - 6)
+				&& (column >= 6 && column <= MAX_WIDTH / PIXEL_SIZE - 7)) {
+				DrawRectangleRec(pixelRec[row][column], BLANK);
+			}
+			//next 2 rows
+			else if ((row == MAX_HEIGHT / PIXEL_SIZE - 7 || row == MAX_HEIGHT / PIXEL_SIZE - 8)
+				&& (column >= 7 && column <= MAX_WIDTH / PIXEL_SIZE - 8)) {
+				DrawRectangleRec(pixelRec[row][column], BLANK);
+			}
+			else {
+				DrawRectangleRec(pixelRec[row][column], pixelColor[row][column]);
+			}
 		}
 	}
-
-	
 }
 
-void Shield::AlienUpdate(Alien *alien) {
+void Shield::alienUpdate(Alien *alien) {
+	Color whiteColor = WHITE;
 	//alien bullet collision
-	if (alien->getBulletX() >= recX - recOrigin.x && alien->getBulletX() <= recX + recOrigin.x) {
-		if (alien->getBulletY() >= recY - recOrigin.y - 10 && alien->getBulletY() <= recY + recOrigin.y) {
-			alien->setBulletStatus(false);
+	for (int row = 0; row < MAX_HEIGHT / PIXEL_SIZE; row++) {
+		for (int column = 0; column < MAX_WIDTH / PIXEL_SIZE; column++) {
+			if (alien->getBulletX() >= pixelRec[row][column].x && alien->getBulletX() <= pixelRec[row][column].x + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
+				if (alien->getBulletY() >= pixelRec[row][column].y && alien->getBulletY() <= pixelRec[row][column].y + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
+					alien->setBulletStatus(false);
+					pixelColor[row][column] = BLANK;
+				}
+			}
+		}
+	}
+}
+
+void Shield::playerUpdate(Bullet *playerBullet) {
+	Color whiteColor = WHITE;
+	//player bullet collision
+	for (int row = 0; row < MAX_HEIGHT / PIXEL_SIZE; row++) {
+		for (int column = 0; column < MAX_WIDTH / PIXEL_SIZE; column++) {
+			if (playerBullet->getRectDestX() >= pixelRec[row][column].x && playerBullet->getRectDestX() <= pixelRec[row][column].x + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
+				if (playerBullet->getRectDestY() >= pixelRec[row][column].y && playerBullet->getRectDestY() <= pixelRec[row][column].y + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
+					playerBullet->reset();
+					pixelColor[row][column] = BLANK;
+				}
+			}
 		}
 	}
 }

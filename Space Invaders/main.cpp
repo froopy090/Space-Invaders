@@ -9,7 +9,7 @@
 #define WINDOW_HEIGHT 800
 #define TARGET_FPS 60
 
-void main() {
+int main() {
 	//initializing window
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Space Invaders");
 	SetTargetFPS(TARGET_FPS);
@@ -65,10 +65,10 @@ void main() {
 
 	Alien alienMatrix[row][column];
 
-	Shield shield1 = Shield(offsetX);
-	Shield shield2 = Shield(offsetX + 200);
-	Shield shield3 = Shield(offsetX + 400);
-	Shield shield4 = Shield(offsetX + 600);
+	Shield *shield1 = new Shield(offsetX);
+	Shield *shield2 = new Shield(offsetX + 200);
+	Shield *shield3 = new Shield(offsetX + 400);
+	Shield *shield4 = new Shield(offsetX + 600);
 
 
 	Alien* alien;
@@ -161,17 +161,17 @@ void main() {
 
 		player.Update();
 
-		shield1.playerUpdate(playerBullet); //player to shield collision update
-		shield2.playerUpdate(playerBullet);
-		shield3.playerUpdate(playerBullet);
-		shield4.playerUpdate(playerBullet);
+		shield1->playerUpdate(playerBullet); //player to shield collision update
+		shield2->playerUpdate(playerBullet);
+		shield3->playerUpdate(playerBullet);
+		shield4->playerUpdate(playerBullet);
 
 		for (int r = 0; r < row; r++) { //alien to shield collision update
 			for (int c = 0; c < column; c++) {
-				shield1.alienUpdate(&alienMatrix[r][c]);
-				shield2.alienUpdate(&alienMatrix[r][c]);
-				shield3.alienUpdate(&alienMatrix[r][c]);
-				shield4.alienUpdate(&alienMatrix[r][c]);
+				shield1->alienUpdate(&alienMatrix[r][c]);
+				shield2->alienUpdate(&alienMatrix[r][c]);
+				shield3->alienUpdate(&alienMatrix[r][c]);
+				shield4->alienUpdate(&alienMatrix[r][c]);
 			}
 		}
 		//--------------------------------------------------	
@@ -188,10 +188,10 @@ void main() {
 			
 			player.Draw();
 
-			shield1.Draw();
-			shield2.Draw();
-			shield3.Draw();
-			shield4.Draw();
+			shield1->Draw();
+			shield2->Draw();
+			shield3->Draw();
+			shield4->Draw();
 
 			//drawing all aliens
 			for (int r = 0; r < row; r++) {
@@ -206,10 +206,16 @@ void main() {
 
 	//deleting stuff to deallocate mem
 	delete playerBullet; //credit thenewchicken
+	delete shield1;
+	delete shield2;
+	delete shield3;
+	delete shield4;
 
 	//closing, unloading
 	UnloadTexture(backgroundTexture);
 	UnloadTexture(shipTexture);
 	UnloadTexture(bulletTexture);
 	CloseWindow();
+
+	return 0;
 }

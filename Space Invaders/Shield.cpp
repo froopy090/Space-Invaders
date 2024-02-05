@@ -1,8 +1,5 @@
 #include "Shield.h"
 
-
-
-
 Shield::Shield(float offsetX)
 	: offsetX(offsetX), xPos(X_POS + offsetX), yPos(Y_POS)
 {

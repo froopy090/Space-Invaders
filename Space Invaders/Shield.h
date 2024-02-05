@@ -25,4 +25,3 @@ private:
 	float yPos;
 	Color pixelColor[MAX_HEIGHT / PIXEL_SIZE][MAX_WIDTH / PIXEL_SIZE];
 };
-

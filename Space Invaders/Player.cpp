@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(Texture2D texture, Rectangle source, Rectangle destination, Vector2 position, float rotation, float speed, Bullet *playerBullet)
-	: Entity(texture, source, destination, position, rotation), speed(speed), playerBullet(playerBullet), isDead(false)
+	: Entity(texture, source, destination, position, rotation), speed(speed), playerBullet(playerBullet), isDead(false), positionXBullet(0)
 {
 
 }

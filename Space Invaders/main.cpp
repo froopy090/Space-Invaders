@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "Alien.h"
 #include "Shield.h"
+#include "Heart.h"
 
 //constants
 #define WINDOW_WIDTH 800
@@ -65,10 +66,12 @@ int main() {
 
 	Alien alienMatrix[row][column];
 
-	Shield *shield1 = new Shield(offsetX);
+	Shield *shield1 = new Shield(offsetX); //these are pointers to avoid having too much stuff in stack, moving these to heap
 	Shield *shield2 = new Shield(offsetX + 200);
 	Shield *shield3 = new Shield(offsetX + 400);
 	Shield *shield4 = new Shield(offsetX + 600);
+
+
 
 
 	Alien* alien;

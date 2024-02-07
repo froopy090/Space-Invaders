@@ -24,6 +24,10 @@ int Bullet::getRectDestY() {
 	return destination.y;
 }
 
+int Bullet::getRectDectWidth() {
+	return destination.width;
+}
+
 void Bullet::setShotBool(bool isShot) {
 	this->isShot = isShot;
 }

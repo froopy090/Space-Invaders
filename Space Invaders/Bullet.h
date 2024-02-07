@@ -19,6 +19,7 @@ public:
     //getters
     int getRectDestX();
     int getRectDestY();
+    int getRectDectWidth();
 
     //setters
     void setDestRecY(int posY);

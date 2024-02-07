@@ -1,8 +1,8 @@
 #pragma once
 #include "raylib.h"
 
-#define X 10
-#define Y 10
+#define X 50
+#define Y 750
 
 class Heart
 {

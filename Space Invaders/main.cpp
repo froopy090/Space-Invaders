@@ -71,6 +71,9 @@ int main() {
 	Shield *shield3 = new Shield(offsetX + 400);
 	Shield *shield4 = new Shield(offsetX + 600);
 
+	Heart* heart1 = new Heart(0.0f);
+	Heart* heart2 = new Heart(40.0f);
+	Heart* heart3 = new Heart(80.0f);
 
 
 
@@ -185,9 +188,15 @@ int main() {
 		//----draw------------------------------------------
 		BeginDrawing();
 			ClearBackground(BLACK);
-			DrawFPS(0, 0);
+			
 
 			background.Draw();
+			DrawFPS(0, 0);
+
+			DrawLine(0, 745, 800, 745, WHITE);
+			heart1->Draw();
+			heart2->Draw();
+			heart3->Draw();
 			
 			player.Draw();
 
@@ -209,10 +218,15 @@ int main() {
 
 	//deleting stuff to deallocate mem
 	delete playerBullet; //credit thenewchicken
+
 	delete shield1;
 	delete shield2;
 	delete shield3;
 	delete shield4;
+
+	delete heart1;
+	delete heart2;
+	delete heart3;
 
 	//closing, unloading
 	UnloadTexture(backgroundTexture);

@@ -84,6 +84,25 @@ void Shield::alienUpdate(Alien *alien) {
 				if (alien->getBulletY() >= pixelRec[row][column].y && alien->getBulletY() <= pixelRec[row][column].y + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
 					alien->setBulletStatus(false);
 					pixelColor[row][column] = BLANK;
+					if (column + 1 < MAX_WIDTH / PIXEL_SIZE) {
+						pixelColor[row][column + 1] = BLANK;
+					}
+					if (column - 1 >= 0) {
+						pixelColor[row][column - 1] = BLANK;
+					}
+
+					//these next checks are for the explosion effect
+					for (int i = 1; i <= 15; i++) {
+						if (row + i < MAX_HEIGHT / PIXEL_SIZE) {
+							pixelColor[row + i][column] = BLANK;
+							if (column + 1 < MAX_WIDTH / PIXEL_SIZE) {
+								pixelColor[row + i][column + 1] = BLANK;
+							}
+							if (column - 1 >= 0) {
+								pixelColor[row + i][column - 1] = BLANK;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -95,10 +114,30 @@ void Shield::playerUpdate(Bullet *playerBullet) {
 	//player bullet collision
 	for (int row = 0; row < MAX_HEIGHT / PIXEL_SIZE; row++) {
 		for (int column = 0; column < MAX_WIDTH / PIXEL_SIZE; column++) {
-			if (playerBullet->getRectDestX() >= pixelRec[row][column].x && playerBullet->getRectDestX() <= pixelRec[row][column].x + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
+			if (playerBullet->getRectDestX() + playerBullet->getRectDectWidth()/2 >= pixelRec[row][column].x && playerBullet->getRectDestX() + playerBullet->getRectDectWidth()/2 <= pixelRec[row][column].x + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
 				if (playerBullet->getRectDestY() >= pixelRec[row][column].y && playerBullet->getRectDestY() <= pixelRec[row][column].y + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
 					playerBullet->reset();
-					pixelColor[row][column] = BLANK;
+					int wtfOffset = 4; //i literally do not know why i need this offset but it works so wtf
+					pixelColor[row + wtfOffset][column] = BLANK;
+					if (column + 1 < MAX_WIDTH / PIXEL_SIZE) {
+						pixelColor[row + wtfOffset][column + 1] = BLANK;
+					}
+					if (column - 1 >= 0) {
+						pixelColor[row + wtfOffset][column - 1] = BLANK;
+					}
+
+					//these next checks are for the explosion effect
+					for (int i = 1; i <= 15; i++) {
+						if (row + wtfOffset - i >= 0) {
+							pixelColor[row + wtfOffset - i][column] = BLANK;
+							if (column + 1 < MAX_WIDTH / PIXEL_SIZE) {
+								pixelColor[row + wtfOffset - i][column + 1] = BLANK;
+							}
+							if (column - 1 >= 0) {
+								pixelColor[row + wtfOffset - i][column - 1] = BLANK;
+							}
+						}
+					}
 				}
 			}
 		}

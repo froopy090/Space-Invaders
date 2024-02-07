@@ -43,7 +43,7 @@ void Alien::setBulletStatus(bool isShot) {
 void Alien::Event() {
 	if (!isDead) {
 		//bullet event
-		if (GetRandomValue(0, 5000) > 4998 && alienBullet.isShot == false) {
+		if (GetRandomValue(0, 5000) > 4990 && alienBullet.isShot == false) {
 			alienBullet.isShot = true;
 			positionXBullet = this->destination.x + 14;
 			positionYBullet = this->destination.y + 14;

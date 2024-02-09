@@ -71,6 +71,7 @@ int main() {
 	Shield *shield3 = new Shield(offsetX + 400);
 	Shield *shield4 = new Shield(offsetX + 600);
 
+	int playerDeathCount = 0; //counter for times the player dies, when it's 3, gameover 
 	Heart* heart1 = new Heart(0.0f);
 	Heart* heart2 = new Heart(40.0f);
 	Heart* heart3 = new Heart(80.0f);
@@ -133,6 +134,8 @@ int main() {
 					if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
 						if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
 							player.kill();
+							alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
+							playerDeathCount++; //increment the death count
 						}
 
 					}
@@ -155,6 +158,8 @@ int main() {
 					if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
 						if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
 							player.kill();
+							alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
+							playerDeathCount++; //increment the death count
 						}
 					}
 				}
@@ -180,6 +185,30 @@ int main() {
 				shield4->alienUpdate(&alienMatrix[r][c]);
 			}
 		}
+
+		//hearts update
+		switch (playerDeathCount)
+		{
+		case 1:
+			heart3->Update(&player);
+			player.isDead = false; //player is revived
+			break;
+		case 2:
+			heart2->Update(&player);
+			player.isDead = false; //player is revived
+			break;
+		case 3:
+			heart1->Update(&player);
+			//and it is also GAMEOVER in this case so don't forget to add that later
+			break;
+		default:
+			break;
+		}
+		
+		
+		
+
+
 		//--------------------------------------------------	
 		
 		

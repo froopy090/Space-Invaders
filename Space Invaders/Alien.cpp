@@ -86,3 +86,6 @@ void Alien::Draw() {
 	}
 }
 
+void Alien::resetBullet() {
+	this->alienBullet.reset();
+}

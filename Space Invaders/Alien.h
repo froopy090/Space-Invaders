@@ -31,6 +31,7 @@ public:
     void setBulletStatus(bool isShot);
 
     //game functions
+    void resetBullet();
     void Event();
     void Update(bool* switchedFlag, bool* isHit);
     void Draw();

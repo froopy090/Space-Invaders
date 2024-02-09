@@ -1,5 +1,6 @@
 #pragma once
 #include "raylib.h"
+#include "Player.h"
 
 #define X 50
 #define Y 750
@@ -9,9 +10,10 @@ class Heart
 public:
 	Heart(float offsetX);
 	void Draw();
-	void Update();
+	void Update(Player* p);
 
 private:
+	bool playerDied;
 	float xPos;
 
 	//top two rectangles

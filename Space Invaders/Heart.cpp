@@ -1,7 +1,7 @@
 #include "Heart.h"
 
 Heart::Heart(float offset)
-	:xPos(X + offset)
+	:xPos(X + offset), playerDied(false)
 {
 	top1 = { xPos, Y, 9,4 };
 	top2 = { xPos + 15, Y, 9, 4 };
@@ -12,10 +12,16 @@ Heart::Heart(float offset)
 }
 
 void Heart::Draw() {
-	DrawRectangleRec(top1, WHITE);
-	DrawRectangleRec(top2, WHITE);
-	DrawRectangleRec(body, WHITE);
-	DrawRectangleRec(bottom1, WHITE);
-	DrawRectangleRec(bottom2, WHITE);
-	DrawRectangleRec(bottom3, WHITE);
+	if (!playerDied) {
+		DrawRectangleRec(top1, WHITE);
+		DrawRectangleRec(top2, WHITE);
+		DrawRectangleRec(body, WHITE);
+		DrawRectangleRec(bottom1, WHITE);
+		DrawRectangleRec(bottom2, WHITE);
+		DrawRectangleRec(bottom3, WHITE);
+	}
+}
+
+void Heart::Update(Player *player) {
+	playerDied = true;
 }

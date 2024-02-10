@@ -4,11 +4,14 @@
 #include "Alien.h"
 #include "Shield.h"
 #include "Heart.h"
+#include "Timer.h"
 
 //constants
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
 #define TARGET_FPS 60
+
+bool PAUSED = false;
 
 int main() {
 	//initializing window
@@ -77,7 +80,9 @@ int main() {
 	Heart* heart2 = new Heart(40.0f);
 	Heart* heart3 = new Heart(80.0f);
 
-
+	//timer stuff
+	Timer timer;
+	float lifetime = 0.5f;
 
 	Alien* alien;
 	//initializing each alien
@@ -115,102 +120,113 @@ int main() {
 				alienMatrix[r][c].Event();
 			}
 		}
+
+		if (!timer.Finished()) {
+			PAUSED = true;
+		}
+		else {
+			PAUSED = false;
+		}
 		//-------------------------------------------------
 		
 
 		//----update----------------------------------------
-		background.Update();
-		player.Update();
-		//updating all alien positions
-		if (isMovingRight) {
-			for (int r = row - 1; r >= 0; r--) {
-				for (int c = column - 1; c >= 0; c--) {
-					if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
-						isHit = true;
-						playerBullet->reset(); //removing the bullet after it hits the alien
-					}
-					alienMatrix[r][c].Update(&switched, &isHit);
-
-					//checking if alien has hit player with bullet
-					if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
-						if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
-							player.kill();
-							alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
-							playerDeathCount++; //increment the death count
+		if (!PAUSED) {
+			background.Update();
+			player.Update();
+			//updating all alien positions
+			if (isMovingRight) {
+				for (int r = row - 1; r >= 0; r--) {
+					for (int c = column - 1; c >= 0; c--) {
+						if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
+							isHit = true;
+							playerBullet->reset(); //removing the bullet after it hits the alien
 						}
+						alienMatrix[r][c].Update(&switched, &isHit);
 
+						//checking if alien has hit player with bullet
+						if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
+							if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
+								player.kill();
+								timer.Start(lifetime);
+								alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
+								playerDeathCount++; //increment the death count
+							}
+
+						}
 					}
 				}
+				if (switched) {
+					isMovingRight = false;
+				}
 			}
-			if (switched) {
-				isMovingRight = false;
+			else {
+				for (int r = 0; r < row; r++) {
+					for (int c = 0; c < column; c++) {
+						if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
+							isHit = true;
+							playerBullet->reset(); //removing the bullet after it hits the alien
+						}
+						alienMatrix[r][c].Update(&switched, &isHit);
+
+						//checking if alien has hit player with bullet
+						if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
+							if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
+								player.kill();
+								timer.Start(lifetime);
+								alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
+								playerDeathCount++; //increment the death count
+							}
+						}
+					}
+				}
+				if (switched) {
+					isMovingRight = true;
+				}
+			}
+			switched = false; //resetting switched flag for next iteration
+
+			player.Update();
+
+			shield1->playerUpdate(playerBullet); //player to shield collision update
+			shield2->playerUpdate(playerBullet);
+			shield3->playerUpdate(playerBullet);
+			shield4->playerUpdate(playerBullet);
+
+			for (int r = 0; r < row; r++) { //alien to shield collision update
+				for (int c = 0; c < column; c++) {
+					shield1->alienUpdate(&alienMatrix[r][c]);
+					shield2->alienUpdate(&alienMatrix[r][c]);
+					shield3->alienUpdate(&alienMatrix[r][c]);
+					shield4->alienUpdate(&alienMatrix[r][c]);
+				}
+			}
+
+			//hearts update
+			switch (playerDeathCount)
+			{
+			case 1:
+				heart3->Update();
+				needsRevived = true; //player is revived
+				break;
+			case 2:
+				heart2->Update();
+				needsRevived = true; //player is revived
+				break;
+			case 3:
+				heart1->Update();
+				needsRevived = false; //player's last life
+				//and it is also GAMEOVER in this case so don't forget to add that later
+				break;
+			default:
+				break;
 			}
 		}
 		else {
-			for (int r = 0; r < row; r++) {
-				for (int c = 0; c < column; c++) {
- 					if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
-						isHit = true;
-						playerBullet->reset(); //removing the bullet after it hits the alien
-					}
-					alienMatrix[r][c].Update(&switched, &isHit);
-
-					//checking if alien has hit player with bullet
-					if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
-						if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
-							player.kill();
-							alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
-							playerDeathCount++; //increment the death count
-						}
-					}
-				}
-			}
-			if (switched) {
-				isMovingRight = true;
-			}
-		}
-		switched = false; //resetting switched flag for next iteration
-
-		player.Update();
-
-		shield1->playerUpdate(playerBullet); //player to shield collision update
-		shield2->playerUpdate(playerBullet);
-		shield3->playerUpdate(playerBullet);
-		shield4->playerUpdate(playerBullet);
-
-		for (int r = 0; r < row; r++) { //alien to shield collision update
-			for (int c = 0; c < column; c++) {
-				shield1->alienUpdate(&alienMatrix[r][c]);
-				shield2->alienUpdate(&alienMatrix[r][c]);
-				shield3->alienUpdate(&alienMatrix[r][c]);
-				shield4->alienUpdate(&alienMatrix[r][c]);
-			}
-		}
-
-		//hearts update
-		switch (playerDeathCount)
-		{
-		case 1:
-			heart3->Update();
-			needsRevived = true; //player is revived
-			break;
-		case 2:
-			heart2->Update();
-			needsRevived = true; //player is revived
-			break;
-		case 3:
-			heart1->Update();
-			needsRevived = false; //player's last life
-			//and it is also GAMEOVER in this case so don't forget to add that later
-			break;
-		default:
-			break;
+			//timer update
+			timer.Update();
 		}
 		
-		
-		
-
-
 		//--------------------------------------------------	
 		
 		
@@ -231,7 +247,6 @@ int main() {
 			
 			player.Draw();
 			if (needsRevived) {
-				//freeze the game for like 0.5 sec
 				player.isDead = false; //revives the player
 			}
 

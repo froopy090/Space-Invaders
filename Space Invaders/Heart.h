@@ -10,7 +10,7 @@ class Heart
 public:
 	Heart(float offsetX);
 	void Draw();
-	void Update(Player* p);
+	void Update();
 
 private:
 	bool playerDied;

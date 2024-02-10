@@ -22,6 +22,6 @@ void Heart::Draw() {
 	}
 }
 
-void Heart::Update(Player *player) {
+void Heart::Update() {
 	playerDied = true;
 }

@@ -72,6 +72,7 @@ int main() {
 	Shield *shield4 = new Shield(offsetX + 600);
 
 	int playerDeathCount = 0; //counter for times the player dies, when it's 3, gameover 
+	bool needsRevived = false;
 	Heart* heart1 = new Heart(0.0f);
 	Heart* heart2 = new Heart(40.0f);
 	Heart* heart3 = new Heart(80.0f);
@@ -190,15 +191,16 @@ int main() {
 		switch (playerDeathCount)
 		{
 		case 1:
-			heart3->Update(&player);
-			player.isDead = false; //player is revived
+			heart3->Update();
+			needsRevived = true; //player is revived
 			break;
 		case 2:
-			heart2->Update(&player);
-			player.isDead = false; //player is revived
+			heart2->Update();
+			needsRevived = true; //player is revived
 			break;
 		case 3:
-			heart1->Update(&player);
+			heart1->Update();
+			needsRevived = false; //player's last life
 			//and it is also GAMEOVER in this case so don't forget to add that later
 			break;
 		default:
@@ -228,6 +230,10 @@ int main() {
 			heart3->Draw();
 			
 			player.Draw();
+			if (needsRevived) {
+				//freeze the game for like 0.5 sec
+				player.isDead = false; //revives the player
+			}
 
 			shield1->Draw();
 			shield2->Draw();

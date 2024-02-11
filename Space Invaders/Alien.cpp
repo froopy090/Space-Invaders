@@ -59,7 +59,12 @@ void Alien::Update(bool* switchedFlag, bool* isHit) {
 		//move in the opposite direction if at the edge of the screen, or move in the opposite direction if another alien got to the edge first
 		if ((destination.x >= GetScreenWidth() - destination.width - 50 || destination.x <= 50) || *switchedFlag) {
 			destination.y += moveY; //moves down
-			moveX *= -1.2; //switches direction multiplier so it moves faster each time
+			if (moveX < 432 && moveX > -432) {
+				moveX *= -1.2; //switches direction multiplier so it moves faster each time
+			}
+			else {
+				moveX *= -1.0; //once speeds reach |360| we move at this constant speed
+			}
 			*switchedFlag = true; //setting flag to true
 		}
 

@@ -48,7 +48,7 @@ void Bullet::Update(int destRecX) {
 void Bullet::AlienUpdate(int destRecX, int destRecY) {
 	this->destination.y += GetFrameTime() * speed;
 	this->destination.x = destRecX;
-	if (this->destination.y >= GetScreenHeight()) {
+	if (this->destination.y >= 745 - this->destination.height) { //doesn't go beyond the line at the bottom of the screen
 		isShot = false;
 		this->destination.y = destRecY;
 	}

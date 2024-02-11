@@ -121,11 +121,15 @@ int main() {
 			}
 		}
 
+		//game pauses while timer is running
 		if (!timer.Finished()) {
 			PAUSED = true;
 		}
 		else {
 			PAUSED = false;
+			if (needsRevived) {
+				player.isDead = false; //revives the player
+			}
 		}
 		//-------------------------------------------------
 		
@@ -226,7 +230,6 @@ int main() {
 			//timer update
 			timer.Update();
 		}
-		
 		//--------------------------------------------------	
 		
 		
@@ -246,9 +249,7 @@ int main() {
 			heart3->Draw();
 			
 			player.Draw();
-			if (needsRevived) {
-				player.isDead = false; //revives the player
-			}
+			
 
 			shield1->Draw();
 			shield2->Draw();

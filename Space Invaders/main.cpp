@@ -113,15 +113,7 @@ int main() {
 
 
 	while (!WindowShouldClose()) {
-		//----events-------------------------------------
-		player.Event();
-		for (int r = 0; r < row; r++) { //alien events
-			for (int c = 0; c < column; c++) {
-				alienMatrix[r][c].Event();
-			}
-		}
-
-		//game pauses while timer is running
+		//game pauses while timer is running--------------
 		if (!timer.Finished()) {
 			PAUSED = true;
 		}
@@ -135,8 +127,17 @@ int main() {
 		//-------------------------------------------------
 		
 
-		//----update----------------------------------------
 		if (!PAUSED) {
+			//----events-------------------------------------
+			player.Event();
+			for (int r = 0; r < row; r++) { //alien events
+				for (int c = 0; c < column; c++) {
+					alienMatrix[r][c].Event();
+				}
+			}
+			//-------------------------------------------------
+
+			//----update----------------------------------------
 			background.Update();
 			player.Update(); //I'm accidentally updating the player twice but it makes the bullet move nicely so im keeping it lol
 			//updating all alien positions

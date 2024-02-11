@@ -52,6 +52,10 @@ int main() {
 	Rectangle alienDest = { 100, 100, 35,35 };
 	float alienSpeed = 200;
 
+	int alien1Point = 10; //points for each alien
+	int alien2Point = 20;
+	int alien3Point = 30;
+
 	//shield variables
 	float offsetX = 0.0f;
 
@@ -244,7 +248,9 @@ int main() {
 			
 
 			background.Draw();
-			DrawFPS(0, 0);
+			DrawText("SCORE < 1 >", 10, 10, 21, WHITE);
+			DrawText("HI-SCORE", 150, 10, 21, WHITE);
+			//DrawFPS(0, 0);
 
 			DrawLine(0, 745, 800, 745, WHITE);
 			heart1->Draw();

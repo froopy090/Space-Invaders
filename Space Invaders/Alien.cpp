@@ -1,7 +1,7 @@
 #include "Alien.h"
 
 Alien::Alien(Texture2D texture, Rectangle source, Rectangle destination, Vector2 position, float rotation, float speed, Bullet alienBullet, bool switchedDirection) 
-	: Entity(texture, source, destination, position, rotation), speed(speed), alienBullet(alienBullet), moveX(15.0), moveY(20.0), isDead(false)
+	: Entity(texture, source, destination, position, rotation), speed(speed), alienBullet(alienBullet), moveX(12.0), moveY(20.0), isDead(false)
 {
 	
 }

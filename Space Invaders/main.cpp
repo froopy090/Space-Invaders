@@ -52,9 +52,6 @@ int main() {
 	Rectangle alienDest = { 100, 100, 35,35 };
 	float alienSpeed = 200;
 
-	int alien1Point = 10; //points for each alien
-	int alien2Point = 20;
-	int alien3Point = 30;
 
 	//shield variables
 	float offsetX = 0.0f;
@@ -87,6 +84,13 @@ int main() {
 	//timer stuff
 	Timer timer;
 	float lifetime = 0.5f;
+
+	//scores
+	int player1Score = 0;
+
+	int alien1Point = 10; //points for 4th and 5th row aliens
+	int alien2Point = 20; //points for 2nd and 3rd row aliens
+	int alien3Point = 30; //points for top row alien
 
 	Alien* alien;
 	//initializing each alien
@@ -151,6 +155,26 @@ int main() {
 						if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
 							isHit = true;
 							playerBullet->reset(); //removing the bullet after it hits the alien
+							switch (r) //updating the score
+							{
+							case 0:
+								player1Score += alien3Point;
+								break;
+							case 1:
+								player1Score += alien2Point;
+								break;
+							case 2:
+								player1Score += alien2Point;
+								break;
+							case 3:
+								player1Score += alien1Point;
+								break;
+							case 4:
+								player1Score += alien1Point;
+								break;
+							default:
+								break;
+							}
 						}
 						alienMatrix[r][c].Update(&switched, &isHit);
 
@@ -176,6 +200,26 @@ int main() {
 						if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
 							isHit = true;
 							playerBullet->reset(); //removing the bullet after it hits the alien
+							switch (r) //updating the score
+							{
+							case 0:
+								player1Score += alien3Point;
+								break;
+							case 1:
+								player1Score += alien2Point;
+								break;
+							case 2:
+								player1Score += alien2Point;
+								break;
+							case 3:
+								player1Score += alien1Point;
+								break;
+							case 4:
+								player1Score += alien1Point;
+								break;
+							default:
+								break;
+							}
 						}
 						alienMatrix[r][c].Update(&switched, &isHit);
 
@@ -249,6 +293,7 @@ int main() {
 
 			background.Draw();
 			DrawText("SCORE < 1 >", 10, 10, 21, WHITE);
+			DrawText(TextFormat("%i", player1Score), 40, 30, 19, WHITE);
 			DrawText("HI-SCORE", 150, 10, 21, WHITE);
 			//DrawFPS(0, 0);
 

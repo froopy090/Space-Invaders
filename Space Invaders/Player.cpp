@@ -44,6 +44,12 @@ void Player::shoot() {
 
 void Player::kill() {
 	this->isDead = true;
+	this->destination.x = 0;
+	this->destination.y = 0;
+}
+
+void Player::revive() {
+	this->isDead = false;
 }
 
 

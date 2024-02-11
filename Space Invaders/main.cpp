@@ -128,7 +128,8 @@ int main() {
 		else {
 			PAUSED = false;
 			if (needsRevived) {
-				player.isDead = false; //revives the player
+				player.revive();
+				needsRevived = false; //resetting flag
 			}
 		}
 		//-------------------------------------------------
@@ -137,7 +138,7 @@ int main() {
 		//----update----------------------------------------
 		if (!PAUSED) {
 			background.Update();
-			player.Update();
+			player.Update(); //I'm accidentally updating the player twice but it makes the bullet move nicely so im keeping it lol
 			//updating all alien positions
 			if (isMovingRight) {
 				for (int r = row - 1; r >= 0; r--) {
@@ -151,7 +152,7 @@ int main() {
 						//checking if alien has hit player with bullet
 						if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
 							if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
-								player.kill();
+								player.isDead = true;
 								timer.Start(lifetime);
 								alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
 								playerDeathCount++; //increment the death count
@@ -176,7 +177,7 @@ int main() {
 						//checking if alien has hit player with bullet
 						if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
 							if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
-								player.kill();
+								player.isDead = true;
 								timer.Start(lifetime);
 								alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
 								playerDeathCount++; //increment the death count
@@ -220,6 +221,7 @@ int main() {
 			case 3:
 				heart1->Update();
 				needsRevived = false; //player's last life
+				player.kill();
 				//and it is also GAMEOVER in this case so don't forget to add that later
 				break;
 			default:

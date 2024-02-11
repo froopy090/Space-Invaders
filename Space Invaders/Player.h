@@ -25,6 +25,7 @@ public:
     //helper
     void shoot();
     void kill();
+    void revive();
     
     void Event();
     void Update();

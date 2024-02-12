@@ -6,7 +6,7 @@ class Alien :
     public Entity
 {
 private:
-    float speed;
+    float* speed;
     Bullet alienBullet;
     float moveX;
     float moveY;
@@ -17,7 +17,7 @@ private:
 public:
     bool isDead;
 
-    Alien(Texture2D texture, Rectangle source, Rectangle destination, Vector2 position, float rotation, float speed, Bullet alienBullet, bool switchedDirection);
+    Alien(Texture2D texture, Rectangle source, Rectangle destination, Vector2 position, float rotation, float* speed, Bullet alienBullet, bool switchedDirection);
     Alien();
 
     //getters
@@ -31,6 +31,7 @@ public:
     void setBulletStatus(bool isShot);
 
     //game functions
+    void UpdateSpeed();
     void resetBullet();
     void Event();
     void Update(bool* switchedFlag, bool* isHit);

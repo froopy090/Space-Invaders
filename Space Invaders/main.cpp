@@ -51,7 +51,10 @@ int main() {
 
 	Rectangle alienSource; //of ships texture
 	Rectangle alienDest = { 100, 100, 35,35 };
-	float alienSpeed = 200;
+	float alienSpeed = 1.05f;
+	//float speedIncrement = .01f;
+
+	bool alienGotShot = false;
 
 
 	//shield variables
@@ -116,7 +119,7 @@ int main() {
 		}
 		for (int c = 0; c < column; c++) {
 			alienDest.x += 50; //moving the alien to the right 
-			alien = new Alien(shipTexture, alienSource, alienDest, position, rotation, alienSpeed, alienBullet, switched);
+			alien = new Alien(shipTexture, alienSource, alienDest, position, rotation, &alienSpeed, alienBullet, switched);
 			alienMatrix[r][c] = *alien;
 			delete alien; //credit thenewchicken
 		}
@@ -179,6 +182,8 @@ int main() {
 						for (int c = column - 1; c >= 0; c--) {
 							if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
 								isHit = true;
+								alienGotShot = true;
+								//alienSpeed += speedIncrement;
 								playerBullet->reset(); //removing the bullet after it hits the alien
 								switch (r) //updating the score
 								{
@@ -224,6 +229,8 @@ int main() {
 						for (int c = 0; c < column; c++) {
 							if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
 								isHit = true;
+								alienGotShot = true;
+								//alienSpeed += speedIncrement;
 								playerBullet->reset(); //removing the bullet after it hits the alien
 								switch (r) //updating the score
 								{
@@ -278,8 +285,14 @@ int main() {
 						shield2->alienUpdate(&alienMatrix[r][c]);
 						shield3->alienUpdate(&alienMatrix[r][c]);
 						shield4->alienUpdate(&alienMatrix[r][c]);
+
+						//updating alien speeds
+						if (alienGotShot) {
+							alienMatrix[r][c].UpdateSpeed(); //updating all speeds only when an alien has been shot
+						}
 					}
 				}
+				alienGotShot = false;
 
 				//hearts update
 				switch (playerDeathCount)

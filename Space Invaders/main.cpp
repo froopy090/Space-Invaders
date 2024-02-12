@@ -12,6 +12,7 @@
 #define TARGET_FPS 60
 
 bool PAUSED = false;
+typedef enum Gamescreen {LOGO, TITLE, GAMEPLAY, GAMEOVER};
 
 int main() {
 	//initializing window
@@ -84,6 +85,9 @@ int main() {
 	//timer stuff
 	Timer timer;
 	float lifetime = 0.5f;
+	
+	Timer logoTimer;
+	logoTimer.Start(2.0f);
 
 	//scores
 	int player1Score = 0;
@@ -91,6 +95,9 @@ int main() {
 	int alien1Point = 10; //points for 4th and 5th row aliens
 	int alien2Point = 20; //points for 2nd and 3rd row aliens
 	int alien3Point = 30; //points for top row alien
+
+	//screen
+	Gamescreen currentScreen = LOGO;
 
 	Alien* alien;
 	//initializing each alien
@@ -133,156 +140,183 @@ int main() {
 			}
 		}
 		//-------------------------------------------------
-		
 
-		if (!PAUSED) {
-			//----events-------------------------------------
-			player.Event();
-			for (int r = 0; r < row; r++) { //alien events
-				for (int c = 0; c < column; c++) {
-					alienMatrix[r][c].Event();
-				}
+
+
+
+		//game screen update-----------------------------
+		//-----------------------------------------------
+		switch (currentScreen)
+		{
+		case LOGO:
+			logoTimer.Update();
+			if (logoTimer.Finished()) { //go to title screen after timer is done
+				currentScreen = TITLE;
 			}
-			//-------------------------------------------------
-
-			//----update----------------------------------------
-			background.Update();
-			player.Update(); //I'm accidentally updating the player twice but it makes the bullet move nicely so im keeping it lol
-			//updating all alien positions
-			if (isMovingRight) {
-				for (int r = row - 1; r >= 0; r--) {
-					for (int c = column - 1; c >= 0; c--) {
-						if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
-							isHit = true;
-							playerBullet->reset(); //removing the bullet after it hits the alien
-							switch (r) //updating the score
-							{
-							case 0:
-								player1Score += alien3Point;
-								break;
-							case 1:
-								player1Score += alien2Point;
-								break;
-							case 2:
-								player1Score += alien2Point;
-								break;
-							case 3:
-								player1Score += alien1Point;
-								break;
-							case 4:
-								player1Score += alien1Point;
-								break;
-							default:
-								break;
-							}
-						}
-						alienMatrix[r][c].Update(&switched, &isHit);
-
-						//checking if alien has hit player with bullet
-						if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
-							if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
-								player.isDead = true;
-								timer.Start(lifetime);
-								alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
-								playerDeathCount++; //increment the death count
-							}
-
-						}
+			break;
+		case TITLE:
+			if (IsKeyPressed(KEY_ENTER)) { //press enter to start the game
+				currentScreen = GAMEPLAY;
+			}
+			break;
+		case GAMEPLAY:
+			if (!PAUSED) {
+				//----events-------------------------------------
+				player.Event();
+				for (int r = 0; r < row; r++) { //alien events
+					for (int c = 0; c < column; c++) {
+						alienMatrix[r][c].Event();
 					}
 				}
-				if (switched) {
-					isMovingRight = false;
+				//-------------------------------------------------
+
+				//----update----------------------------------------
+				background.Update();
+				player.Update(); //I'm accidentally updating the player twice but it makes the bullet move nicely so im keeping it lol
+				//updating all alien positions
+				if (isMovingRight) {
+					for (int r = row - 1; r >= 0; r--) {
+						for (int c = column - 1; c >= 0; c--) {
+							if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
+								isHit = true;
+								playerBullet->reset(); //removing the bullet after it hits the alien
+								switch (r) //updating the score
+								{
+								case 0:
+									player1Score += alien3Point;
+									break;
+								case 1:
+									player1Score += alien2Point;
+									break;
+								case 2:
+									player1Score += alien2Point;
+									break;
+								case 3:
+									player1Score += alien1Point;
+									break;
+								case 4:
+									player1Score += alien1Point;
+									break;
+								default:
+									break;
+								}
+							}
+							alienMatrix[r][c].Update(&switched, &isHit);
+
+							//checking if alien has hit player with bullet
+							if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
+								if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
+									player.isDead = true;
+									timer.Start(lifetime);
+									alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
+									playerDeathCount++; //increment the death count
+								}
+
+							}
+						}
+					}
+					if (switched) {
+						isMovingRight = false;
+					}
+				}
+				else {
+					for (int r = 0; r < row; r++) {
+						for (int c = 0; c < column; c++) {
+							if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
+								isHit = true;
+								playerBullet->reset(); //removing the bullet after it hits the alien
+								switch (r) //updating the score
+								{
+								case 0:
+									player1Score += alien3Point;
+									break;
+								case 1:
+									player1Score += alien2Point;
+									break;
+								case 2:
+									player1Score += alien2Point;
+									break;
+								case 3:
+									player1Score += alien1Point;
+									break;
+								case 4:
+									player1Score += alien1Point;
+									break;
+								default:
+									break;
+								}
+							}
+							alienMatrix[r][c].Update(&switched, &isHit);
+
+							//checking if alien has hit player with bullet
+							if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
+								if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
+									player.isDead = true;
+									timer.Start(lifetime);
+									alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
+									playerDeathCount++; //increment the death count
+								}
+							}
+						}
+					}
+					if (switched) {
+						isMovingRight = true;
+					}
+				}
+				switched = false; //resetting switched flag for next iteration
+
+				player.Update();
+
+				shield1->playerUpdate(playerBullet); //player to shield collision update
+				shield2->playerUpdate(playerBullet);
+				shield3->playerUpdate(playerBullet);
+				shield4->playerUpdate(playerBullet);
+
+				for (int r = 0; r < row; r++) { //alien to shield collision update
+					for (int c = 0; c < column; c++) {
+						shield1->alienUpdate(&alienMatrix[r][c]);
+						shield2->alienUpdate(&alienMatrix[r][c]);
+						shield3->alienUpdate(&alienMatrix[r][c]);
+						shield4->alienUpdate(&alienMatrix[r][c]);
+					}
+				}
+
+				//hearts update
+				switch (playerDeathCount)
+				{
+				case 1:
+					heart3->Update();
+					needsRevived = true; //player is revived
+					break;
+				case 2:
+					heart2->Update();
+					needsRevived = true; //player is revived
+					break;
+				case 3:
+					heart1->Update();
+					needsRevived = false; //player's last life
+					player.kill();
+					currentScreen = GAMEOVER; //its game over :(
+					break;
+				default:
+					break;
 				}
 			}
 			else {
-				for (int r = 0; r < row; r++) {
-					for (int c = 0; c < column; c++) {
-						if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
-							isHit = true;
-							playerBullet->reset(); //removing the bullet after it hits the alien
-							switch (r) //updating the score
-							{
-							case 0:
-								player1Score += alien3Point;
-								break;
-							case 1:
-								player1Score += alien2Point;
-								break;
-							case 2:
-								player1Score += alien2Point;
-								break;
-							case 3:
-								player1Score += alien1Point;
-								break;
-							case 4:
-								player1Score += alien1Point;
-								break;
-							default:
-								break;
-							}
-						}
-						alienMatrix[r][c].Update(&switched, &isHit);
-
-						//checking if alien has hit player with bullet
-						if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
-							if (alienMatrix[r][c].getBulletX() >= player.getRecDestX() && alienMatrix[r][c].getBulletX() <= player.getRecDestX() + 32) {
-								player.isDead = true;
-								timer.Start(lifetime);
-								alienMatrix[r][c].resetBullet(); //removing bullet after it hits player
-								playerDeathCount++; //increment the death count
-							}
-						}
-					}
-				}
-				if (switched) {
-					isMovingRight = true;
-				}
+				//timer update
+				timer.Update();
 			}
-			switched = false; //resetting switched flag for next iteration
-
-			player.Update();
-
-			shield1->playerUpdate(playerBullet); //player to shield collision update
-			shield2->playerUpdate(playerBullet);
-			shield3->playerUpdate(playerBullet);
-			shield4->playerUpdate(playerBullet);
-
-			for (int r = 0; r < row; r++) { //alien to shield collision update
-				for (int c = 0; c < column; c++) {
-					shield1->alienUpdate(&alienMatrix[r][c]);
-					shield2->alienUpdate(&alienMatrix[r][c]);
-					shield3->alienUpdate(&alienMatrix[r][c]);
-					shield4->alienUpdate(&alienMatrix[r][c]);
-				}
+			//--------------------------------------------------	
+			break;
+		case GAMEOVER:
+			if (IsKeyPressed(KEY_ENTER)) { //press enter to return to title screen
+				currentScreen = TITLE;
 			}
-
-			//hearts update
-			switch (playerDeathCount)
-			{
-			case 1:
-				heart3->Update();
-				needsRevived = true; //player is revived
-				break;
-			case 2:
-				heart2->Update();
-				needsRevived = true; //player is revived
-				break;
-			case 3:
-				heart1->Update();
-				needsRevived = false; //player's last life
-				player.kill();
-				//and it is also GAMEOVER in this case so don't forget to add that later
-				break;
-			default:
-				break;
-			}
+		default:
+			break;
 		}
-		else {
-			//timer update
-			timer.Update();
-		}
-		//--------------------------------------------------	
-		
+		//-----------------------------------------------
+		//-----------------------------------------------
 		
 		
 
@@ -290,32 +324,50 @@ int main() {
 		BeginDrawing();
 			ClearBackground(BLACK);
 			
+			switch (currentScreen)
+			{
+			case LOGO:
+				DrawText("LOGO STUFF GOES HERE", 100, 300, 50, WHITE);
+				break;
+			case TITLE:
+				DrawText("SPACE INVADERS", 100, 50, 70, WHITE);
+				DrawText("Press ENTER to start", 100, 150, 50, WHITE);
+				break;
+			case GAMEPLAY:
+				background.Draw();
+				DrawText("SCORE < 1 >", 10, 10, 21, WHITE);
+				DrawText(TextFormat("%i", player1Score), 40, 30, 19, WHITE);
+				DrawText("HI-SCORE", 150, 10, 21, WHITE);
+				//DrawFPS(0, 0);
 
-			background.Draw();
-			DrawText("SCORE < 1 >", 10, 10, 21, WHITE);
-			DrawText(TextFormat("%i", player1Score), 40, 30, 19, WHITE);
-			DrawText("HI-SCORE", 150, 10, 21, WHITE);
-			//DrawFPS(0, 0);
+				DrawLine(0, 745, 800, 745, WHITE);
+				heart1->Draw();
+				heart2->Draw();
+				heart3->Draw();
 
-			DrawLine(0, 745, 800, 745, WHITE);
-			heart1->Draw();
-			heart2->Draw();
-			heart3->Draw();
-			
-			player.Draw();
-			
+				player.Draw();
 
-			shield1->Draw();
-			shield2->Draw();
-			shield3->Draw();
-			shield4->Draw();
 
-			//drawing all aliens
-			for (int r = 0; r < row; r++) {
-				for (int c = 0; c < column; c++) {
-					alienMatrix[r][c].Draw();
+				shield1->Draw();
+				shield2->Draw();
+				shield3->Draw();
+				shield4->Draw();
+
+				//drawing all aliens
+				for (int r = 0; r < row; r++) {
+					for (int c = 0; c < column; c++) {
+						alienMatrix[r][c].Draw();
+					}
 				}
+				break;
+			case GAMEOVER:
+				DrawText("GAMEOVER :(", 100, 300, 70, WHITE);
+				break;
+			default:
+				break;
 			}
+
+			
 			
 		EndDrawing();
 		//--------------------------------------------------

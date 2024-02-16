@@ -184,7 +184,7 @@ int main() {
 				//----update----------------------------------------
 				background.Update();
 				player.Update(); //I'm accidentally updating the player twice but it makes the bullet move nicely so im keeping it lol
-				bonusAlien.checkBulletCollision(playerBullet);
+				bonusAlien.checkBulletCollision(playerBullet, &player1Score);
 				bonusAlien.Update();
 				//updating all alien positions
 				if (isMovingRight) {

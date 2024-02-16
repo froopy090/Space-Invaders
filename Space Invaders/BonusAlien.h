@@ -11,7 +11,7 @@ public:
     void Update();
     void Event();
     void Draw();
-    void checkBulletCollision(Bullet* playerBullet);
+    void checkBulletCollision(Bullet* playerBullet, int* playerScore);
     void Reset();
 
 private:

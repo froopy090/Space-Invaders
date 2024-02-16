@@ -36,9 +36,10 @@ void BonusAlien::Draw() {
 	}
 }
 
-void BonusAlien::checkBulletCollision(Bullet* playerBullet) {
+void BonusAlien::checkBulletCollision(Bullet* playerBullet, int* playerScore) {
 	if (!isDead && playerBullet->getRectDestY() <= destination.y && playerBullet->getRectDestX() >= destination.x && playerBullet->getRectDestX() <= destination.x + destination.width) {
 		isDead = true;
+		*playerScore += 100;
 	}
 }
 

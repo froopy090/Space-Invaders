@@ -5,6 +5,7 @@
 #include "Shield.h"
 #include "Heart.h"
 #include "Timer.h"
+#include "BonusAlien.h"
 
 //constants
 #define WINDOW_WIDTH 800
@@ -57,6 +58,11 @@ int main() {
 	bool alienGotShot = false;
 
 
+	//bonus alien variables
+	Rectangle bonusAlienSource = {41, 10, 6, 4};
+	Rectangle bonusAlienDest = {0, 50, 35, 35};
+
+
 	//shield variables
 	float offsetX = 0.0f;
 
@@ -73,6 +79,7 @@ int main() {
 	Player player(shipTexture, playerSource, playerDest, position, rotation, speed, playerBullet);
 
 	Alien alienMatrix[row][column];
+	BonusAlien bonusAlien(shipTexture, position, bonusAlienSource, bonusAlienDest);
 
 	Shield *shield1 = new Shield(offsetX); //these are pointers to avoid having too much stuff in stack, moving these to heap
 	Shield *shield2 = new Shield(offsetX + 200);
@@ -166,6 +173,7 @@ int main() {
 			if (!PAUSED) {
 				//----events-------------------------------------
 				player.Event();
+				bonusAlien.Event();
 				for (int r = 0; r < row; r++) { //alien events
 					for (int c = 0; c < column; c++) {
 						alienMatrix[r][c].Event();
@@ -176,6 +184,8 @@ int main() {
 				//----update----------------------------------------
 				background.Update();
 				player.Update(); //I'm accidentally updating the player twice but it makes the bullet move nicely so im keeping it lol
+				bonusAlien.checkBulletCollision(playerBullet);
+				bonusAlien.Update();
 				//updating all alien positions
 				if (isMovingRight) {
 					for (int r = row - 1; r >= 0; r--) {
@@ -359,7 +369,7 @@ int main() {
 				heart3->Draw();
 
 				player.Draw();
-
+				bonusAlien.Draw();
 
 				shield1->Draw();
 				shield2->Draw();

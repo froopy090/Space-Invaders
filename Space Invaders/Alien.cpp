@@ -1,7 +1,7 @@
 #include "Alien.h"
 
 Alien::Alien(Texture2D texture, Rectangle source, Rectangle destination, Vector2 position, float rotation, float* speed, Bullet alienBullet, bool switchedDirection) 
-	: Entity(texture, source, destination, position, rotation), speed(speed), alienBullet(alienBullet), moveX(12.0), moveY(20.0), isDead(false)
+	: Entity(texture, source, destination, position, rotation), speed(speed), alienBullet(alienBullet), moveX(32.0), moveY(20.0), isDead(false)
 {
 	
 }
@@ -96,5 +96,14 @@ void Alien::UpdateSpeed() {
 	}
 	else {
 		moveX *= 1.0; //once speeds reach |360| we move at this constant speed
+	}
+}
+
+bool Alien::Wins() {
+	if (destination.y + 35 >= 745) {
+		return true; //aliens win -> game over
+	}
+	else {
+		return false; //aliens haven't won
 	}
 }

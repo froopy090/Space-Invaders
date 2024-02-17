@@ -13,7 +13,7 @@
 #define TARGET_FPS 60
 
 bool PAUSED = false;
-typedef enum Gamescreen {LOGO, TITLE, GAMEPLAY, GAMEOVER};
+typedef enum Gamescreen {LOGO = 0, TITLE, GAMEPLAY, GAMEOVER, WIN};
 
 int main() {
 	//initializing window
@@ -299,6 +299,11 @@ int main() {
 						//updating alien speeds
 						if (alienGotShot) {
 							alienMatrix[r][c].UpdateSpeed(); //updating all speeds only when an alien has been shot
+						}
+
+						//checking if aliens reached the bottom of screen
+						if (alienMatrix[r][c].Wins()) {
+							currentScreen = GAMEOVER;
 						}
 					}
 				}

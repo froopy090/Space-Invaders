@@ -36,5 +36,6 @@ public:
     void Event();
     void Update(bool* switchedFlag, bool* isHit);
     void Draw();
+    bool Wins();
 };
 

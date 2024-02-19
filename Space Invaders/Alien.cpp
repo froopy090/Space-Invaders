@@ -29,8 +29,8 @@ int Alien::getBulletY() {
 	return this->alienBullet.getRectDestY();
 }
 
-Bullet Alien::getAlienBullet() {
-	return this->alienBullet;
+Bullet* Alien::getAlienBullet() {
+	return &alienBullet;
 }
 
 

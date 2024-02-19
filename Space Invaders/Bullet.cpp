@@ -28,6 +28,10 @@ int Bullet::getRectDectWidth() {
 	return destination.width;
 }
 
+int Bullet::getRectDestHeight() {
+	return destination.height;
+}
+
 void Bullet::setShotBool(bool isShot) {
 	this->isShot = isShot;
 }
@@ -51,5 +55,15 @@ void Bullet::AlienUpdate(int destRecX, int destRecY) {
 	if (this->destination.y >= 745 - this->destination.height) { //doesn't go beyond the line at the bottom of the screen
 		isShot = false;
 		this->destination.y = destRecY;
+	}
+}
+
+//checks collision with another bullet
+void Bullet::CheckCollision(Bullet* b) {
+	if (this->destination.y >= b->getRectDestY() && this->destination.y <= b->getRectDestY() + b->getRectDestHeight()) {
+		if (this->destination.x >= b->getRectDestX() && this->destination.x <= b->getRectDestX() + b->getRectDectWidth()) {
+			b->isShot = false;
+			this->isShot = false;
+		}
 	}
 }

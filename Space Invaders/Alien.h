@@ -25,7 +25,7 @@ public:
     int getRectDestY();
     int getBulletY();
     int getBulletX();
-    Bullet getAlienBullet();
+    Bullet* getAlienBullet();
 
     //setter
     void setBulletStatus(bool isShot);

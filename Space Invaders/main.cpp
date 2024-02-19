@@ -217,6 +217,7 @@ int main() {
 								}
 							}
 							alienMatrix[r][c].Update(&switched, &isHit);
+							alienMatrix[r][c].getAlienBullet()->CheckCollision(playerBullet); //checking if player bullet hits alien bullet
 
 							//checking if alien has hit player with bullet
 							if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {
@@ -264,6 +265,7 @@ int main() {
 								}
 							}
 							alienMatrix[r][c].Update(&switched, &isHit);
+							alienMatrix[r][c].getAlienBullet()->CheckCollision(playerBullet); //checking if player bullet hits alien bullet
 
 							//checking if alien has hit player with bullet
 							if ((alienMatrix[r][c].getBulletY() <= player.getRecDestY() + 32) && (alienMatrix[r][c].getBulletY() >= player.getRecDestY())) {

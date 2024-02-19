@@ -15,11 +15,13 @@ public:
 
     //helper
     void reset();
+    void CheckCollision(Bullet* b);
 
     //getters
     int getRectDestX();
     int getRectDestY();
     int getRectDectWidth();
+    int getRectDestHeight();
 
     //setters
     void setDestRecY(int posY);

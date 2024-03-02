@@ -87,7 +87,7 @@ void Alien::Draw() {
 }
 
 void Alien::resetBullet() {
-	this->alienBullet.reset();
+	this->alienBullet.ResetAlienBullet();
 }
 
 void Alien::UpdateSpeed() {

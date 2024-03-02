@@ -14,7 +14,8 @@ public:
     Bullet();
 
     //helper
-    void reset();
+    void ResetPlayerBullet();
+    void ResetAlienBullet();
     void CheckCollision(Bullet* b);
 
     //getters

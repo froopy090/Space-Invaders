@@ -116,7 +116,7 @@ void Shield::playerUpdate(Bullet *playerBullet) {
 		for (int column = 0; column < MAX_WIDTH / PIXEL_SIZE; column++) {
 			if (playerBullet->getRectDestX() + playerBullet->getRectDectWidth()/2 >= pixelRec[row][column].x && playerBullet->getRectDestX() + playerBullet->getRectDectWidth()/2 <= pixelRec[row][column].x + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
 				if (playerBullet->getRectDestY() >= pixelRec[row][column].y && playerBullet->getRectDestY() <= pixelRec[row][column].y + PIXEL_SIZE && *(int*)&pixelColor[row][column] == *(int*)&whiteColor) {
-					playerBullet->reset();
+					playerBullet->ResetPlayerBullet();
 					int wtfOffset = 4; //i literally do not know why i need this offset but it works so wtf
 					pixelColor[row + wtfOffset][column] = BLANK;
 					if (column + 1 < MAX_WIDTH / PIXEL_SIZE) {

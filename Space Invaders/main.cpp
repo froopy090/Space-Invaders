@@ -194,7 +194,7 @@ int main() {
 								isHit = true;
 								alienGotShot = true;
 								//alienSpeed += speedIncrement;
-								playerBullet->reset(); //removing the bullet after it hits the alien
+								playerBullet->ResetPlayerBullet(); //removing the bullet after it hits the alien
 								switch (r) //updating the score
 								{
 								case 0:
@@ -242,7 +242,7 @@ int main() {
 								isHit = true;
 								alienGotShot = true;
 								//alienSpeed += speedIncrement;
-								playerBullet->reset(); //removing the bullet after it hits the alien
+								playerBullet->ResetPlayerBullet(); //removing the bullet after it hits the alien
 								switch (r) //updating the score
 								{
 								case 0:

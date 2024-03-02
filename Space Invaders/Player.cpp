@@ -76,7 +76,7 @@ void Player::Event() {
 
 		//bullet event
 		if (IsKeyPressed(KEY_SPACE) && playerBullet->isShot == false) {
-			playerBullet->reset();
+			playerBullet->ResetPlayerBullet();
 			playerBullet->isShot = true;
 			positionXBullet = this->destination.x + 14;
 		}

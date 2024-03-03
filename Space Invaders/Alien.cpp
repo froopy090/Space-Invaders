@@ -107,3 +107,13 @@ bool Alien::Wins() {
 		return false; //aliens haven't won
 	}
 }
+
+void Alien::Reset() {
+	isDead = false;
+	this->destination = InitDest; //restores the initial position when game started
+	this->alienBullet.ResetAlienBullet();
+	if (moveX < 0) {
+		moveX *= -1;
+	}
+	moveX = 12.0f;
+}

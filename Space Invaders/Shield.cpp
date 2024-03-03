@@ -143,3 +143,11 @@ void Shield::playerUpdate(Bullet *playerBullet) {
 		}
 	}
 }
+
+void Shield::Reset() {
+	for (int row = 0; row < MAX_HEIGHT / PIXEL_SIZE; row++) {
+		for (int column = 0; column < MAX_WIDTH / PIXEL_SIZE; column++) {
+			pixelColor[row][column] = WHITE;
+		}
+	}
+}

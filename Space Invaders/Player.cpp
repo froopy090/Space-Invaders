@@ -45,13 +45,16 @@ void Player::shoot() {
 void Player::kill() {
 	this->isDead = true;
 	this->destination.x = 0;
-	this->destination.y = 0;
 }
 
 void Player::revive() {
 	this->isDead = false;
 }
 
+void Player::Reset() {
+	this->isDead = false;
+	this->destination.x = GetScreenWidth() / 2 - this->destination.width;
+}
 
 void Player::Event() {
 	if (!isDead) {

@@ -16,6 +16,7 @@ public:
 	void Draw();
 	void playerUpdate(Bullet *playerBullet);
 	void alienUpdate(Alien *alien);
+	void Reset();
 
 private:
 	float offsetX; //decides where the entire shield will be drawn

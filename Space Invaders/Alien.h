@@ -16,6 +16,7 @@ private:
 
 public:
     bool isDead;
+    Rectangle InitDest; //keeps a copy of the original positions of an alien
 
     Alien(Texture2D texture, Rectangle source, Rectangle destination, Vector2 position, float rotation, float* speed, Bullet alienBullet, bool switchedDirection);
     Alien();
@@ -37,5 +38,6 @@ public:
     void Update(bool* switchedFlag, bool* isHit);
     void Draw();
     bool Wins();
+    void Reset();
 };
 

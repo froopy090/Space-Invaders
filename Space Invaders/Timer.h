@@ -8,7 +8,6 @@ private:
 
 public:
 	void Start(float lifetime);
-	//void Start();
 	bool Finished();
 	void Update();
 };

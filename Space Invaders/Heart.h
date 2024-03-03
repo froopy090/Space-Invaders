@@ -11,6 +11,7 @@ public:
 	Heart(float offsetX);
 	void Draw();
 	void Update();
+	void Reset();
 
 private:
 	bool playerDied;

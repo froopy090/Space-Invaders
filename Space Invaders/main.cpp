@@ -128,6 +128,7 @@ int main() {
 			alienDest.x += 50; //moving the alien to the right 
 			alien = new Alien(shipTexture, alienSource, alienDest, position, rotation, &alienSpeed, alienBullet, switched);
 			alienMatrix[r][c] = *alien;
+			alienMatrix[r][c].InitDest = alienDest;
 			delete alien; //credit thenewchicken
 		}
 
@@ -336,12 +337,59 @@ int main() {
 				//timer update
 				timer.Update();
 			}
+
 			//--------------------------------------------------	
 			break;
 		case GAMEOVER:
 			if (IsKeyPressed(KEY_ENTER)) { //press enter to return to title screen
 				currentScreen = TITLE;
 			}
+
+			//resetting entities
+			for (int r = 0; r < row; r++) {
+				for (int c = 0; c < column; c++) {
+					alienMatrix[r][c].Reset();
+				}
+			}
+
+			bonusAlien.Reset();
+
+			heart1->Reset();
+			heart2->Reset();
+			heart3->Reset();
+
+			player.Reset();
+			playerDeathCount = 0;
+
+			shield1->Reset();
+			shield2->Reset();
+			shield3->Reset();
+			shield4->Reset();
+
+			break;
+		case WIN:
+			if (IsKeyPressed(KEY_ENTER)) { //press enter to keep playing
+				currentScreen = TITLE;
+			}
+			if (IsKeyPressed(KEY_SPACE)) { //press space to quit and return to title
+				currentScreen = TITLE;
+			}
+			//resetting entities, but not resetting the hearts
+			for (int r = 0; r < row; r++) {
+				for (int c = 0; c < column; c++) {
+					alienMatrix[r][c].Reset();
+				}
+			}
+
+			bonusAlien.Reset();
+
+			player.Reset();
+
+			shield1->Reset();
+			shield2->Reset();
+			shield3->Reset();
+			shield4->Reset();
+			break;
 		default:
 			break;
 		}
@@ -392,6 +440,10 @@ int main() {
 				break;
 			case GAMEOVER:
 				DrawText("GAMEOVER :(", 100, 300, 70, WHITE);
+				break;
+			case WIN:
+				DrawText("CLEAR !", 100, 300, 70, YELLOW);
+				DrawText("Press ENTER to keep going, or SPACE to quit", 150, 400, 50, YELLOW);
 				break;
 			default:
 				break;

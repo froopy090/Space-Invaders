@@ -25,3 +25,7 @@ void Heart::Draw() {
 void Heart::Update() {
 	playerDied = true;
 }
+
+void Heart::Reset() {
+	playerDied = false;
+}

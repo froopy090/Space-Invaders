@@ -30,5 +30,6 @@ public:
     void Event();
     void Update();
     void Draw();
+    void Reset();
 };
 

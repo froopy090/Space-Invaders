@@ -345,6 +345,11 @@ int main() {
 				currentScreen = WIN;
 			}
 
+
+			//cheat code: insta-wins the game
+			/*if (IsKeyPressed(KEY_COMMA)) {
+				currentScreen = WIN;
+			}*/
 			//--------------------------------------------------	
 			break;
 		case GAMEOVER:
@@ -451,8 +456,35 @@ int main() {
 				DrawText("GAMEOVER :(", 100, 300, 70, WHITE);
 				break;
 			case WIN:
-				DrawText("CLEAR !", 100, 300, 70, YELLOW);
-				DrawText("Press ENTER to keep going, or SPACE to quit", 150, 400, 50, YELLOW);
+				//drawing game
+				background.Draw();
+				DrawText("SCORE < 1 >", 10, 10, 21, WHITE);
+				DrawText(TextFormat("%i", player1Score), 40, 30, 19, WHITE);
+				DrawText("HI-SCORE", 150, 10, 21, WHITE);
+				//DrawFPS(0, 0);
+
+				DrawLine(0, 745, 800, 745, WHITE);
+				heart1->Draw();
+				heart2->Draw();
+				heart3->Draw();
+
+				player.Draw();
+				bonusAlien.Draw();
+
+				shield1->Draw();
+				shield2->Draw();
+				shield3->Draw();
+				shield4->Draw();
+
+				//drawing all aliens
+				for (int r = 0; r < row; r++) {
+					for (int c = 0; c < column; c++) {
+						alienMatrix[r][c].Draw();
+					}
+				}
+
+				DrawText("CLEAR !", 300, 400, 70, YELLOW);
+				DrawText("Press ENTER to keep going, or SPACE to quit", 50, 500, 30, YELLOW);
 				break;
 			default:
 				break;

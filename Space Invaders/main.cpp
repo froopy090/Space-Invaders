@@ -56,6 +56,7 @@ int main() {
 	//float speedIncrement = .01f;
 
 	bool alienGotShot = false;
+	int alienDeathCounter = 0;
 
 
 	//bonus alien variables
@@ -194,6 +195,7 @@ int main() {
 							if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
 								isHit = true;
 								alienGotShot = true;
+								alienDeathCounter++;
 								//alienSpeed += speedIncrement;
 								playerBullet->ResetPlayerBullet(); //removing the bullet after it hits the alien
 								switch (r) //updating the score
@@ -242,6 +244,7 @@ int main() {
 							if ((player.getBulletY() <= alienMatrix[r][c].getRectDestY() + 35) && (player.getBulletY() >= alienMatrix[r][c].getRectDestY()) && ((player.getBulletX() >= alienMatrix[r][c].getRectDestX()) && (player.getBulletX() <= alienMatrix[r][c].getRectDestX() + 35)) && !alienMatrix[r][c].isDead) { //checking to see if alien got hit by player
 								isHit = true;
 								alienGotShot = true;
+								alienDeathCounter++;
 								//alienSpeed += speedIncrement;
 								playerBullet->ResetPlayerBullet(); //removing the bullet after it hits the alien
 								switch (r) //updating the score
@@ -338,6 +341,10 @@ int main() {
 				timer.Update();
 			}
 
+			if (alienDeathCounter == (row * column)) { //if all aliens are dead, player wins
+				currentScreen = WIN;
+			}
+
 			//--------------------------------------------------	
 			break;
 		case GAMEOVER:
@@ -349,6 +356,7 @@ int main() {
 			for (int r = 0; r < row; r++) {
 				for (int c = 0; c < column; c++) {
 					alienMatrix[r][c].Reset();
+					alienDeathCounter = 0;
 				}
 			}
 
@@ -369,7 +377,7 @@ int main() {
 			break;
 		case WIN:
 			if (IsKeyPressed(KEY_ENTER)) { //press enter to keep playing
-				currentScreen = TITLE;
+				currentScreen = GAMEPLAY;
 			}
 			if (IsKeyPressed(KEY_SPACE)) { //press space to quit and return to title
 				currentScreen = TITLE;
@@ -378,6 +386,7 @@ int main() {
 			for (int r = 0; r < row; r++) {
 				for (int c = 0; c < column; c++) {
 					alienMatrix[r][c].Reset();
+					alienDeathCounter = 0;
 				}
 			}
 

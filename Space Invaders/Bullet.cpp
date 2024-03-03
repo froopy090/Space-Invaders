@@ -64,10 +64,12 @@ void Bullet::AlienUpdate(int destRecX, int destRecY) {
 
 //checks collision with another bullet
 void Bullet::CheckCollision(Bullet* b) {
-	if (this->destination.y >= b->getRectDestY() && this->destination.y <= b->getRectDestY() + b->getRectDestHeight()) {
-		if (this->destination.x >= b->getRectDestX() && this->destination.x <= b->getRectDestX() + b->getRectDectWidth()) {
-			b->ResetPlayerBullet();
-			this->ResetAlienBullet();
+	if (this->isShot && b->isShot) { //first makes sure that the bullets have actually been shot
+		if (this->destination.y >= b->getRectDestY() && this->destination.y <= b->getRectDestY() + b->getRectDestHeight()) {
+			if (this->destination.x >= b->getRectDestX() && this->destination.x <= b->getRectDestX() + b->getRectDectWidth()) {
+				b->ResetPlayerBullet();
+				this->ResetAlienBullet();
+			}
 		}
 	}
 }

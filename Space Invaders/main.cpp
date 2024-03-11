@@ -6,14 +6,23 @@
 #include "Heart.h"
 #include "Timer.h"
 #include "BonusAlien.h"
+#include "iostream"
+#include <fstream>
+#include "string"
 
 //constants
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
 #define TARGET_FPS 60
+#define MAX_INPUT_CHARS 3
 
+//some definitions
 bool PAUSED = false;
-typedef enum Gamescreen {LOGO = 0, TITLE, GAMEPLAY, GAMEOVER, WIN};
+typedef enum Gamescreen {LOGO = 0, TITLE, GAMEPLAY, GAMEOVER, WIN, HIGHSCORES};
+struct highscore {
+	char name[MAX_INPUT_CHARS + 1]; //3 chars for name + 1 for terminating char
+	int score;
+};
 
 int main() {
 	//initializing window
@@ -138,6 +147,22 @@ int main() {
 	}
 	alienDest.y = 100; //resetting the y position because idk
 
+	//highscore variables
+	highscore playerHighscore;
+	char playerName[MAX_INPUT_CHARS + 1];
+	int letterCount = 0;
+	int key = 0;
+	Rectangle textBox = {GetScreenWidth()/2 - 50, GetScreenHeight()/2 - 25, 100, 50};
+
+	std::ofstream fileOut;
+	std::ifstream fileIn;
+	highscore readScore[100]; //array of scores to then be shown on screen
+	Rectangle scoresBox = { 100, 100, 600, 600 };
+	bool saved = false;
+
+	int adj = 0;
+	int scoreY = 0;
+
 
 	while (!WindowShouldClose()) {
 		//game pauses while timer is running--------------
@@ -170,6 +195,8 @@ int main() {
 			if (IsKeyPressed(KEY_ENTER)) { //press enter to start the game
 				currentScreen = GAMEPLAY;
 			}
+
+			saved = false; //now I can save a new score on file
 			break;
 		case GAMEPLAY:
 			if (!PAUSED) {
@@ -350,13 +377,12 @@ int main() {
 			/*if (IsKeyPressed(KEY_COMMA)) {
 				currentScreen = WIN;
 			}*/
+
+			//saving score
+			playerHighscore.score = player1Score;
 			//--------------------------------------------------	
 			break;
 		case GAMEOVER:
-			if (IsKeyPressed(KEY_ENTER)) { //press enter to return to title screen
-				currentScreen = TITLE;
-			}
-
 			//resetting entities
 			for (int r = 0; r < row; r++) {
 				for (int c = 0; c < column; c++) {
@@ -373,19 +399,77 @@ int main() {
 
 			player.Reset();
 			playerDeathCount = 0;
+			player1Score = 0;
 
 			shield1->Reset();
 			shield2->Reset();
 			shield3->Reset();
 			shield4->Reset();
 
+			//user input for username
+			key = GetCharPressed();
+
+			//check if more characters have been pressed on the same frame
+			while (key > 0) {
+				//only keys in range [32, 125]
+				if ((key >= 32) && (key <= 125) && letterCount < MAX_INPUT_CHARS) {
+					playerName[letterCount] = (char)key;
+					playerName[letterCount + 1] = '\0'; //add null terminator at the end of the string
+					letterCount++;
+				}
+				key = GetCharPressed(); //checking for next character
+			}
+
+			//checking if user deletes letters
+			if (IsKeyPressed(KEY_BACKSPACE)) {
+				letterCount--;
+				if (letterCount < 0) letterCount = 0;
+				playerName[letterCount] = '\0';
+			}
+
+			//saving the name in struct
+			if (IsKeyPressed(KEY_ENTER)) {
+				strcpy_s(playerHighscore.name, playerName);
+				currentScreen = HIGHSCORES;
+			}
+			break;
+		case HIGHSCORES:
+			if (IsKeyPressed(KEY_ENTER)) currentScreen = TITLE; //enter to return to title screen
+
+
+			//reading/writing to file
+			if (!saved) { //I only want to read/write ONCE, this should not repeat every iteration
+				//writing to file
+				fileOut.open("Highscores.bin", std::ios::binary | std::ios::app);
+				if (fileOut.is_open()) {
+					fileOut.write(reinterpret_cast<char*>(&playerHighscore), sizeof(highscore));
+
+					std::cout << "success writing in fileOut!" << std::endl;
+
+					fileOut.close();
+				}
+				else {
+					std::cerr << "error opening the fileOut for writing" << std::endl;
+				}
+
+				//reading from the file
+				fileIn.open("Highscores.bin", std::ios::binary);
+				if (fileIn.is_open()) {
+					fileIn.read(reinterpret_cast<char*>(&readScore), 100 * sizeof(highscore));
+
+					std::cout << "success reading fileIn!" << std::endl;
+
+					fileIn.close();
+				}
+				else {
+					std::cerr << "error opening the fileIn for reading" << std::endl;
+				}
+				saved = true;
+			}
 			break;
 		case WIN:
 			if (IsKeyPressed(KEY_ENTER)) { //press enter to keep playing
 				currentScreen = GAMEPLAY;
-			}
-			if (IsKeyPressed(KEY_SPACE)) { //press space to quit and return to title
-				currentScreen = TITLE;
 			}
 			//resetting entities, but not resetting the hearts
 			for (int r = 0; r < row; r++) {
@@ -453,7 +537,38 @@ int main() {
 				}
 				break;
 			case GAMEOVER:
-				DrawText("GAMEOVER :(", 100, 300, 70, WHITE);
+				DrawText("GAMEOVER :(", 100, 100, 70, WHITE);
+				DrawText(TextFormat("Final Score: %i", playerHighscore.score), 100, 170, 60, WHITE);
+				DrawText("Type your name :>", textBox.x - 150, textBox.y - 70, 50, WHITE);
+				DrawRectangleRec(textBox, GRAY);
+				if(letterCount > 0) DrawText(playerName, (int)textBox.x + 5, (int)textBox.y + 8, 40, WHITE);
+				break;
+			case HIGHSCORES:
+				DrawRectangleRec(scoresBox, GRAY);
+				//character array to hold the combined string
+				char combinedArray[20];
+
+				//ints for scores placement
+				scoreY = scoresBox.y + 10;
+				for (const auto& score : readScore) {
+					
+					if (score.score >= 0 && score.score < 1000000) {
+						//copying the characters of player name into array
+						strcpy_s(combinedArray, score.name);
+
+						//appending the score
+						strcat_s(combinedArray, " - ");
+						char scoreStr[5]; //buffer to hold the score as string
+						sprintf_s(scoreStr, "%d", score.score);
+						strcat_s(combinedArray, scoreStr);
+						strcat_s(combinedArray, "\n"); //at this point i should have "name - score\n"
+
+						DrawText(combinedArray, scoresBox.x + 10, scoreY, 30, WHITE);
+
+						//adjusting positioning
+						scoreY += 30;
+					}
+				}
 				break;
 			case WIN:
 				//drawing game
@@ -484,7 +599,7 @@ int main() {
 				}
 
 				DrawText("CLEAR !", 300, 400, 70, YELLOW);
-				DrawText("Press ENTER to keep going, or SPACE to quit", 50, 500, 30, YELLOW);
+				DrawText("Press ENTER to keep going!", 50, 500, 30, YELLOW);
 				break;
 			default:
 				break;

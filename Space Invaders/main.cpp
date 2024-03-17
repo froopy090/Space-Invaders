@@ -514,7 +514,7 @@ int main() {
 			switch (currentScreen)
 			{
 			case LOGO:
-				DrawText("LOGO STUFF GOES HERE", 100, 300, 50, WHITE);
+				DrawText("FROOPY GAMES", 100, 300, 50, YELLOW);
 				break;
 			case TITLE:
 				DrawText("SPACE INVADERS", 100, 50, 70, WHITE);

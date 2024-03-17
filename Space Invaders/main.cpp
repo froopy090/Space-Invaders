@@ -448,7 +448,7 @@ int main() {
 			//reading/writing to file
 			if (!saved) { //I only want to read/write ONCE, this should not repeat every iteration
 				//writing to file
-				fileOut.open("Highscores.bin", std::ios::binary | std::ios::app);
+				fileOut.open("resources/Highscores.bin", std::ios::binary | std::ios::app);
 				if (fileOut.is_open()) {
 					fileOut.write(reinterpret_cast<char*>(&playerHighscore), sizeof(highscore));
 
@@ -461,7 +461,7 @@ int main() {
 				}
 
 				//reading from the file
-				fileIn.open("Highscores.bin", std::ios::binary);
+				fileIn.open("resources/Highscores.bin", std::ios::binary);
 				if (fileIn.is_open()) {
 					fileIn.read(reinterpret_cast<char*>(&readScore), 100 * sizeof(highscore));
 

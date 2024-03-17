@@ -9,6 +9,7 @@
 #include "iostream"
 #include <fstream>
 #include "string"
+#include "algorithm"
 
 //constants
 #define WINDOW_WIDTH 800
@@ -21,8 +22,15 @@ bool PAUSED = false;
 typedef enum Gamescreen {LOGO = 0, TITLE, GAMEPLAY, GAMEOVER, WIN, HIGHSCORES};
 struct highscore {
 	char name[MAX_INPUT_CHARS + 1]; //3 chars for name + 1 for terminating char
-	int score;
+	int score = 0;
 };
+
+//helper functions
+
+//compares two highscore structs by their score value and returns 1 if the first is greater than the second highscore
+bool compareHighScores(highscore& a, highscore& b) {
+	return a.score > b.score;
+}
 
 int main() {
 	//initializing window
@@ -157,11 +165,11 @@ int main() {
 	std::ofstream fileOut;
 	std::ifstream fileIn;
 	highscore readScore[100]; //array of scores to then be shown on screen
-	Rectangle scoresBox = { 100, 100, 600, 600 };
 	bool saved = false;
 
 	int adj = 0;
 	int scoreY = 0;
+	int maxScoreCount = 0; //there should be max 19 scores shown on the leaderboard, the others are still saved just not shown
 
 
 	while (!WindowShouldClose()) {
@@ -465,6 +473,9 @@ int main() {
 					std::cerr << "error opening the fileIn for reading" << std::endl;
 				}
 				saved = true;
+
+				//ordering readScore in descending order
+				std::sort(readScore, readScore + 100, compareHighScores);
 			}
 			break;
 		case WIN:
@@ -544,26 +555,26 @@ int main() {
 				if(letterCount > 0) DrawText(playerName, (int)textBox.x + 5, (int)textBox.y + 8, 40, WHITE);
 				break;
 			case HIGHSCORES:
-				DrawRectangleRec(scoresBox, GRAY);
+				DrawText("TOP 20 HIGHSCORES", 75, 20, 60, YELLOW);
+
 				//character array to hold the combined string
 				char combinedArray[20];
 
-				//ints for scores placement
-				scoreY = scoresBox.y + 10;
-				for (const auto& score : readScore) {
-					
-					if (score.score >= 0 && score.score < 1000000) {
+				//printing scores on screen
+				scoreY = 150;
+				for (int i = 0; i < 20; i++) { //only showing top 20 highscores
+					if (readScore[i].score > 0 && readScore[i].score < 1000000) {
 						//copying the characters of player name into array
-						strcpy_s(combinedArray, score.name);
+						strcpy_s(combinedArray, readScore[i].name);
 
 						//appending the score
 						strcat_s(combinedArray, " - ");
 						char scoreStr[5]; //buffer to hold the score as string
-						sprintf_s(scoreStr, "%d", score.score);
+						sprintf_s(scoreStr, "%d", readScore[i].score);
 						strcat_s(combinedArray, scoreStr);
-						strcat_s(combinedArray, "\n"); //at this point i should have "name - score\n"
+						strcat_s(combinedArray, "\n"); //at this point I have "name - score\n"
 
-						DrawText(combinedArray, scoresBox.x + 10, scoreY, 30, WHITE);
+						DrawText(combinedArray, 345, scoreY, 22, WHITE);
 
 						//adjusting positioning
 						scoreY += 30;

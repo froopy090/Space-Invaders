@@ -653,6 +653,9 @@ int main() {
 	UnloadTexture(backgroundTexture);
 	UnloadTexture(shipTexture);
 	UnloadTexture(bulletTexture);
+	UnloadMusicStream(music);
+	player.UnloadSound();
+
 	CloseWindow();
 
 	return 0;

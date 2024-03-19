@@ -109,3 +109,7 @@ void Player::Draw() {
 		}
 	}
 }
+
+void Player::UnloadSound() {
+	UnloadMusicStream(playerBulletSound);
+}

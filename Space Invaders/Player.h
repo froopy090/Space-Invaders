@@ -9,6 +9,7 @@ private:
     float speed;
     Bullet *playerBullet; //credit thenewchicken
     int positionXBullet;
+    Music playerBulletSound = LoadMusicStream("resources/sound/bulletSound.wav"); //bullet sound
 
 public:
     bool isDead;

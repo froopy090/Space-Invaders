@@ -82,12 +82,20 @@ void Player::Event() {
 			playerBullet->ResetPlayerBullet();
 			playerBullet->isShot = true;
 			positionXBullet = this->destination.x + 14;
+
+			//play sound
+			PlayMusicStream(playerBulletSound);
 		}
 	}
 	
 }
 
 void Player::Update() {
+	//update sounds
+	UpdateMusicStream(playerBulletSound);
+
+	if (!playerBullet->isShot) StopMusicStream(playerBulletSound); //stop playing bullet sound after bullet goes away
+
 	if (playerBullet->isShot && !isDead) {
 		playerBullet->Update(positionXBullet);
 	}

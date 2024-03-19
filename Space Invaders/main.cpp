@@ -37,6 +37,10 @@ int main() {
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Space Invaders");
 	SetTargetFPS(TARGET_FPS);
 
+	//initializing music and sounds
+	InitAudioDevice();
+	Music music = LoadMusicStream("resources/sound/Space invaderz.wav"); //main music
+
 	//loading texture
 	Texture2D backgroundTexture = LoadTexture("resources/texture/background.png");
 	Texture2D shipTexture = LoadTexture("resources/texture/ships.png");
@@ -200,6 +204,11 @@ int main() {
 			}
 			break;
 		case TITLE:
+			//reset music at title screen
+			StopMusicStream(music);
+			PlayMusicStream(music);
+
+			
 			if (IsKeyPressed(KEY_ENTER)) { //press enter to start the game
 				currentScreen = GAMEPLAY;
 			}
@@ -207,6 +216,9 @@ int main() {
 			saved = false; //now I can save a new score on file
 			break;
 		case GAMEPLAY:
+			//play music during gameplay
+			UpdateMusicStream(music);
+
 			if (!PAUSED) {
 				//----events-------------------------------------
 				player.Event();
@@ -391,6 +403,9 @@ int main() {
 			//--------------------------------------------------	
 			break;
 		case GAMEOVER:
+			//stop music
+			StopMusicStream(music);
+
 			//resetting entities
 			for (int r = 0; r < row; r++) {
 				for (int c = 0; c < column; c++) {
